@@ -1,0 +1,22 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+  font-size: 20px;
+  line-height: 1.5;
+  background-color: rgb(3, 3, 3);
+}
+
+a {
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+a:hover {
+  opacity: 0.6;
+}

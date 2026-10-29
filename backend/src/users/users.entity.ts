@@ -1,0 +1,15 @@
+import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+
+@Entity('users')
+export class User{
+    @PrimaryGeneratedColumn()
+    id: number;
+    @Column({default: ''})
+    name: string;
+    @Column({default: ''})
+    password: string;
+    @Column({unique: true})
+    email: string;
+    @Column()
+    accept: boolean;
+}

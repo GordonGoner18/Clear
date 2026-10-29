@@ -1,0 +1,30 @@
+#Header-body{
+    display: flex;
+    color: aliceblue;
+    background-color: rgb(20, 14, 134);
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    width: 100%;
+    height: 80px;
+    justify-content: end;
+    padding-right: 15px;
+    gap: 12px;
+    align-items: center;
+    font-family: "Comic Relief", system-ui;
+    position: fixed top;
+}
+
+#header-nav{
+    justify-content: end;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex: 1;
+}
+
+#prozrachno-label{
+    font-family: 'Oswald', sans-serif;
+    font-size: 30px;
+    margin-right: auto;
+    margin-left: 15px;
+}
