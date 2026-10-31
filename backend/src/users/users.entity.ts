@@ -13,3 +13,13 @@ export class User{
     @Column()
     accept: boolean;
 }
+
+@Entity('RecoveryPasswordCode')
+export class RecoveryPasswordCode{
+    @PrimaryGeneratedColumn()
+    id: number;
+    @Column()
+    code: string;
+    @Column({unique: true})
+    email: string;
+}

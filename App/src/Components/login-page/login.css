@@ -47,6 +47,8 @@
 
 #accept{
     cursor: pointer;
+    width: 20px;
+    height: 20px;
 }
 
 #switchmode{

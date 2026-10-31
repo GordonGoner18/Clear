@@ -38,10 +38,4 @@ export class UsersService {
         return {id: user.id, name: user.name}
     }
 
-    async findemail(body: findeamildto){
-        const email = await this.userRepository.findOneBy({email:body.email})
-            if(!email) throw new ConflictException('email не найден')
-            //здесь потом сделаем отправку письма
-    }
-
 }

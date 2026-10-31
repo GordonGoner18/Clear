@@ -12,6 +12,7 @@ function App() {
       <Header/>
       <Home/>
       <RecoveryPage/>
+      <Login/>
     </div>
   )
 }

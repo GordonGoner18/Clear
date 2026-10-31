@@ -4,14 +4,16 @@ import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
 import { UsersModule } from './users/users.module.js';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './users/users.entity.js';
+import { RecoveryPasswordCode, User } from './users/users.entity.js';
+import { ConfigModule } from '@nestjs/config';
 
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
 @Module({
   imports: [
-    // Distributed tracing, auto-correlated logs, request/job metrics, error
-    // telemetry, alarms, and more — out of the box. Sign up at https://observe.nestjs.com
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     ObserveModule.forRoot({
       appKey: 'YOUR_APP_KEY',
       appSecret: 'YOUR_APP_SECRET',
@@ -24,9 +26,9 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
       username: "timurp",
       database: "clear",
       password: "",
-      entities: [User],
+      entities: [User,RecoveryPasswordCode],
       synchronize: true
-    }),UsersModule
+    }),UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
