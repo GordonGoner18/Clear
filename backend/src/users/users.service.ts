@@ -5,6 +5,7 @@ import { User } from './users.entity.js';
 import { createdto } from './users.dto.js';
 import bcrypt from 'bcrypt';
 import { logindto } from './users.logindto.js';
+import { findeamildto } from './users.find-email-for-recovery-dto.js';
 
 @Injectable()
 export class UsersService {
@@ -35,6 +36,12 @@ export class UsersService {
         if(!user || !(await bcrypt.compare(body.password, user.password)))
             throw new UnauthorizedException('Неверный email или пароль');
         return {id: user.id, name: user.name}
+    }
+
+    async findemail(body: findeamildto){
+        const email = await this.userRepository.findOneBy({email:body.email})
+            if(!email) throw new ConflictException('email не найден')
+            //здесь потом сделаем отправку письма
     }
 
 }
