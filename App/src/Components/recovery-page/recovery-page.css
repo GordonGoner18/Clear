@@ -10,6 +10,7 @@
     margin: 0 auto;
     align-items: center;
     border-radius: 10px;
+    margin: auto;
 }
 
 #recovery-email-body{
@@ -23,29 +24,25 @@
     margin: 0 auto;
     align-items: center;
     border-radius: 10px;
+    margin: auto;
 }
-
-
 
 #main-label{
     color: black;
     font-family: 'Oswald', sans-serif;
 }
 
-input{
-    border-radius: 5px;
-    width: 80%;
-    height: 70px;
-}
+
 
 #button-complex{
     width: 100%;
-    height: 100%;
+    height: 30%;
     display: flex;
     align-items: center;
     justify-content: space-evenly;
     position: relative;
 }
+
 
 #back{
     font-size: 20px;
@@ -65,8 +62,76 @@ input{
     cursor: pointer;
 }
 
-#input-area{
+#password-complex{
+    width: 86%;
+}
+
+#New-Password-form{
+    margin: auto;
+    max-width: 400px;
+    max-height: 400px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(202, 240, 247);
+    align-items: center;
+    border-radius: 10px;
+}
+
+#message{
+    font-size: 12px;
+    max-width: 300px;
+    color: red;
+}
+
+.info-labels{
     margin-top: 10px;
-    margin-right: 250px;
-    font-size: 16px;
+    max-width: 300px;
+    font-size: 12px;
+}
+
+.input-area{
+    border-radius: 5px;
+    max-width: 300px;
+    width: 100%;
+}
+
+#success-body{
+    display: flex;
+    width: 100%;
+    max-width: 400px;
+    height: 100%;
+    max-height: 500px;
+    background-color: green;
+    border-radius: 10px;
+    border-style: solid;
+    border-width: 2px;
+    border-color: lime;
+    flex-direction: column;
+    align-items: center;
+    margin: auto;
+    color: white;
+}
+
+#success-body label{
+    margin-top: 50px;
+    font-family: 'Oswald', sans-serif;
+    color: white;
+}
+
+#next{
+    width: 300px;
+    max-width: 300px;
+    height: 50px;
+    background-color: rgb(140, 245, 255);
+    cursor: pointer;
+    margin-top: auto;
+    margin-bottom: 100px;
+    border-radius: 30px;
+    font-size: 20px;
+}
+
+#next:hover{
+    background-color: rgba(140, 245, 255, 0.900);
 }

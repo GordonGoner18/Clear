@@ -1,12 +1,11 @@
 import "./success-regmessage-page.css"
 
-const SuccessRegmessage = function() {
-    
+const SuccessRegmessage = function({SetMode}) {
     
     return(
         <div id="body-form">
             <label id="main-label">Вы успешно зарегистрировались</label>
-            <button id="next">Войти</button>
+            <button id="next" onClick={()=>{SetMode('login')}}>Войти</button>
         </div>
     )
 }

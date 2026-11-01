@@ -1,9 +1,10 @@
-import { Body, Controller, HttpCode, Post } from '@nestjs/common';
+import { Body, Controller, HttpCode, Patch, Post } from '@nestjs/common';
 import { UsersService } from './users.service.js';
 import { createdto } from './dto/users.dto.js';
 import { logindto } from './dto/users.logindto.js';
 import { SendemailService } from './users.sendletter.js';
 import { codedto, findeamildto } from './dto/users.find-email-for-recovery-dto.js';
+import { setnewpasswordto } from './dto/users.setnewpasswordto.js';
 
 @Controller('users')
 export class UsersController {
@@ -30,4 +31,10 @@ export class UsersController {
     async CheckCode(@Body() body: codedto){
         return await this.SendEmailSerive.checkcode(body)
     }
+
+    @Patch('new-password')
+    async SetNewPassword(@Body() body: setnewpasswordto){
+        return await this.UsersService.SetNewPassword(body)
+    }
+
 }

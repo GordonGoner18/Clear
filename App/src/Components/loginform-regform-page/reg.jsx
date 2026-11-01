@@ -1,9 +1,10 @@
 import React, { useState} from "react";
-import "../login-page/login.css"
+import "./reg-login.css"
 import openeye from "../../icons/eye-open.png"
 import closeeye from "../../icons/eye-close.png"
+import { checkEmail, checkName, checkPassword, checkCheckBox } from "../../utils/validation.js"
 
-const Reg = function({ setMode }){
+const Reg = function({ SetMode }){
 
     const [showPassword, setShowPassword] = useState(false)
     const [eyePositon, setEyePosition] = useState(openeye)
@@ -17,48 +18,8 @@ const Reg = function({ setMode }){
     const [email, setEmail] = useState("")
     const [checkbox, setCheckBox] = useState(false)
     
-    const checkPassword = () => {
-         const passwordRegister = /^(?=.*[A-Za-zА-Яа-я])(?=.*\d)\S{8,20}$/;
-        if(password === passwordRepeat || passwordRepeat == ""){
-            if(password.length > 20 || password.length < 8 && !password == "" && !passwordRepeat == ""){
-                if(!passwordRegister.test(password)){
-                    return "Пароль должен содержать числа и буквы и сецальные символы"
-                }
-                return "Пароль не должен быть в диапозоне от 8 до 20 символов"
-            }else 
-                return ""
-        }
-        else
-            return "Пароли не совпадают"
-    }
-
-    const checkEmail = () => {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if(!emailRegex.test(email) && email !== ""){
-            return "Некорректный формат email"
-        }
-        else{
-            return ""
-        }
-    }
-
-    const checkCheckBox = () => {
-        if(checkbox)
-            return ""
-        else
-            return "Примите политику пользования"
-    }
-
-    const checkAll = function(){
-        if(checkPassword() === "" && checkEmail() === "" && checkCheckBox() === "" && userName !== "" && send){
-            if(submid)
-                return "Запрос отправлен";
-            else
-                return "";
-        }else{
-            if(send)
-                return "Проверьте все поля";
-        }
+    const firstError = function(){
+        return checkEmail(email) || checkName(userName) || checkPassword(password, passwordRepeat) || checkCheckBox(checkbox)
     }
 
     const reqest = async function(){
@@ -69,9 +30,9 @@ const Reg = function({ setMode }){
             password: password
         }
 
-        if(checkPassword() === "" && checkEmail() === "" && checkCheckBox() === "" && userName !== "" && passwordRepeat !== "" && password !== "" && !submid){
+        if(firstError() === "" && !submid){
             setSubmit(true);
-            setServerMessage("")
+            setServerMessage('')
             try {
                 const regrespose = await fetch("http://localhost:3000/users/reg",
                     {
@@ -88,7 +49,7 @@ const Reg = function({ setMode }){
 
                 if(regrespose.ok){
                     setSubmit(false);
-                    setMode('login');
+                    SetMode('succes-reg-message');
                 }else{
                     setSubmit(false)
                     setServerMessage(Array.isArray(result.message) ? result.message.join(". ") : result.message)
@@ -103,22 +64,18 @@ const Reg = function({ setMode }){
     }
     
     const ErrorMessage = function(){
-        if(checkAll() !== "" && send)
-            return <label className="error-message">{checkAll()}</label>
-        else if(checkEmail() !== "")
-            return <label className="error-message">{checkEmail()}</label>
-        else if(serverMessage !== "" )
+        if(serverMessage !== "")
             return <label className="error-message">{serverMessage}</label>
-        else if(checkCheckBox() !== "" && send)
-            return <label className="error-message">{checkCheckBox()}</label>
-        else if(checkPassword() !== "")
-            return <label className="error-message">{checkPassword()}</label>
+        if(send && firstError() !== "")
+            return <label className="error-message">{firstError()}</label>
+        if(submid)
+            return <label className="error-message">Запрос отправлен</label>
     }
     
     return(
         <div id="login-body">
             <label id="main-label">Зраегистрироватся</label>
-            <div id="switchmode"><button onClick={()=>setMode('login')}>Вход</button><button className="active" onClick={()=>setMode('reg')}>Регистрация</button></div>
+            <div id="switchmode"><button onClick={()=>SetMode('login')}>Вход</button><button className="active" onClick={()=>SetMode('reg')}>Регистрация</button></div>
             <input value={email} onChange={(e)=>{setEmail(e.target.value)}} className="input-area" placeholder="Введите email"></input>
             <input value={userName} onChange={(e)=>{setUserName(e.target.value)}} className="input-area" placeholder="Введите ваше имя"></input>
             <div id="password-complex">

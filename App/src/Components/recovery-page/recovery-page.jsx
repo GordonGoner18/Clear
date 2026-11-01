@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react"
 import "./recovery-page.css"
+import openeye from "../../icons/eye-open.png"
+import closeeye from "../../icons/eye-close.png"
+import { checkEmail, checkPassword } from "../../utils/validation.js"
 
-const RecoveryPage = function({setMode}) {
+const RecoveryPage = function({SetMode}) {
     
     const [time, SetTime] = useState(300)
     const [navigatin, setNavigain] = useState("first-state")
@@ -12,11 +15,11 @@ const RecoveryPage = function({setMode}) {
     const [newPassword, setNewPassword] = useState('')
     const [newPasswordReaped, setNewPasswordReaped] = useState('')
     const [status, setStatus] = useState(false)
-
+    const [showPassword, setShowPassword] = useState(false)
 
     const backlogick = function(){
         if(navigatin === "first-state"){
-            setMode('login')
+            SetMode('login')
             setEmail('')
             setCode('')
             setServerMessage('')
@@ -24,23 +27,42 @@ const RecoveryPage = function({setMode}) {
         } 
         else if (navigatin === 'second-state' ){
             setNavigain('first-state')
+            setServerMessage('')
         }
         else if (navigatin === "third-state"){
-            setMode('login')
+            SetMode('login')
             setNavigain('first-state')
-            setCode('')
             setServerMessage('')
             setSubmit(false)
         }
     }
 
-    const checkEmail = () => {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if(!emailRegex.test(email) && email !== ""){
-            return "Некорректный формат email"
+    const SendNewPassword = async function(){
+        const data = {password: newPassword, email: email, code: code}
+        const passwordError = checkPassword(newPassword, newPasswordReaped)
+        if(passwordError !== ""){
+            setServerMessage(passwordError)
         }
         else{
-            return ""
+            try{
+                const reqest = await fetch("http://localhost:3000/users/new-password",
+                    {
+                        method: "PATCH",
+                        headers: {"Content-Type" : "application/json"},
+                        body: JSON.stringify(data)
+                    }
+                )
+                const reqest_text = await reqest.text() 
+                if(reqest_text === "success"){
+                    setNavigain('foth')
+
+                }
+                else{
+                    setServerMessage(reqest_text)
+                }
+            }catch(err){
+                setServerMessage('что-то пошло не так')
+            }
         }
     }
 
@@ -58,11 +80,12 @@ const RecoveryPage = function({setMode}) {
         const response = await reqest.text()
         if(await response === 'success'){
             setNavigain('third-state')
+            setServerMessage('')
         }else if(await response === 'не верный код'){
             setServerMessage(await response)
         }
         else{
-            setServerMessage('что-то пошоло не так попробуйте позже')
+            setServerMessage('что-то пошло не так попробуйте позже')
         }
     }
 
@@ -75,7 +98,7 @@ const RecoveryPage = function({setMode}) {
 
     const SendData = async function(){
         setSubmit(false)
-        if(!submid){
+        if(!submid && checkEmail(email) === ""){
             const UserData = {email: email}
             try{
                 const reqest = await fetch("http://localhost:3000/users/Recovery-Password",
@@ -88,14 +111,17 @@ const RecoveryPage = function({setMode}) {
                     }
                 )
                 if(reqest.ok) {
+                    setSubmit(true)
                     setNavigain('second-state')
-                    setServerMessage(`код отправлен будет действиьелен в течение ${Math.trunc(time / 60)}:${String(time % 60).padStart(2, "0")}`)
+                    setServerMessage(`код отправлен будет действителен в течение ${Math.trunc(time / 60)}:${String(time % 60).padStart(2, "0")}`)
                 }
             }catch(err){
                 setSubmit(false)
                 console.log(err)
                 setServerMessage('что-то пошло не так')
             }
+        }else{
+            setServerMessage(checkEmail(email))
         }
     }
 
@@ -104,11 +130,11 @@ const RecoveryPage = function({setMode}) {
             <div id="recovery-email-body">
                 <label id="main-label">Востановление пароля</label>
                 <label id="input-area">Ваш email</label>
-                <input onChange={(e)=>{setEmail(e.target.value)}}></input>
-                <label id="mesage"></label>
+                <input className="input-area" value={email} onChange={(e)=>{setEmail(e.target.value)}}></input>
+                <label id="message">{serverMessage}</label>
                 <div id="button-complex">
                     <label onClick={()=>{backlogick()}} id="back">Назад</label>
-                    <button id="submit" onClick={()=>{if(checkEmail() == "") SendData()}}>Продолжить</button>
+                    <button id="submit" onClick={()=>{SendData()}}>Продолжить</button>
                 </div>
             </div>
         )
@@ -117,9 +143,9 @@ const RecoveryPage = function({setMode}) {
         return (
             <div id="recovery-code-body">
                 <label id="main-label">Востановление пароля</label>
-                <label id="mesage">{serverMessage}</label>
-                <label id="input-area">Ввведите код</label>
-                <input onChange={(e)=>{setCode(e.target.value)}}></input>
+                <label id="input-area">Введите код</label>
+                <input className="input-area" value={code} onChange={(e)=>{setCode(e.target.value)}}></input>
+                <label id="message">{serverMessage}</label>
                 <div id="button-complex">
                     <label onClick={()=>{backlogick()}} id="back">Назад</label>
                     <button onClick={()=>{checkcode()}} id="submit">Продолжить</button>
@@ -129,27 +155,28 @@ const RecoveryPage = function({setMode}) {
     }
     else if(navigatin === 'third-state'){
         return(
-            <div>
-                <label></label>
-                <label></label>
-                <div>
-                    <input></input>
-                    <button></button>
+            <div id="New-Password-form">
+                <label id="main-label">Придумайте новый пароль</label>
+                <label className="info-labels">Введите новый пароль</label>
+                <div id="password-complex">
+                    <input value={newPassword} onChange={(e)=> {setNewPassword(e.target.value)}} className="input-area" type={showPassword ? "text" : "password"}></input>
+                    <button id="eye-button" type="button" aria-label="Показать пароль" onClick={()=> setShowPassword(!showPassword)} ><img id="eye" src={showPassword ? openeye : closeeye} alt=""></img></button>
                 </div>
-                <label></label>
-                <input></input>
-                <div>
-                    <label></label>
-                    <button></button>
+                <label className="info-labels">Повторите пароль</label>
+                <input value={newPasswordReaped} onChange={(e)=> {setNewPasswordReaped(e.target.value)}} className="input-area" type={showPassword ? "text" : "password"}></input>
+                <label id="message">{serverMessage}</label>
+                <div id="button-complex">
+                    <label onClick={()=>{backlogick()}} id="back">Назад</label>
+                    <button id="submit" onClick={()=>{SendNewPassword()}}>Продолжить</button>
                 </div>
             </div>
         )
     }
-    else if(status){
+    else if(navigatin === 'foth'){
         return(
-            <div>
-                <label></label>
-                <button></button>
+            <div id="success-body">
+                <label id="main-label">Успешная смена пароля</label>
+                <button id="next" onClick={()=>{SetMode('login')}}>Войти</button>
             </div>
         )
     }

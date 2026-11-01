@@ -1,16 +1,15 @@
 import React, { useState } from "react";
 import "./header.css"
 
-const Header = function(){
-    const[state, setState] = useState([])
+const Header = function({SetMode}){
     return(
         <div id="Header-body">
             <nav id="header-nav">
-                <a id="prozrachno-label">Прозрачно</a>
-                <a id="fast-start">Быстрая проверка</a>
+                <a onClick={()=>{SetMode('home')}} id="prozrachno-label">Прозрачно</a>
+                <a onClick={()=>{SetMode('fast-check')}} id="fast-start">Быстрая проверка</a>
                 <a id="about">О нас</a>
                 <a id="help">Помощь</a>
-                <a id="acount">Личный кабинет</a>
+                <a onClick={()=>{SetMode('login')}} id="acount">Личный кабинет</a>
             </nav>
         </div>
     );
