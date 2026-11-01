@@ -1,20 +1,37 @@
 import { useEffect, useState } from "react"
 import "./recovery-page.css"
 
-const RecoveryPage = function() {
+const RecoveryPage = function({setMode}) {
     
     const [time, SetTime] = useState(300)
-    const [navigatin, setNavigain] = useState(false)
+    const [navigatin, setNavigain] = useState("first-state")
     const [email, setEmail] = useState("")
     const [code, setCode] = useState("")
     const [submid, setSubmit] = useState(false)
     const [serverMessage, setServerMessage] = useState(false)
+    const [newPassword, setNewPassword] = useState('')
+    const [newPasswordReaped, setNewPasswordReaped] = useState('')
+    const [status, setStatus] = useState(false)
+
 
     const backlogick = function(){
-        if(navigatin){
-            setNavigain(false)
+        if(navigatin === "first-state"){
+            setMode('login')
+            setEmail('')
+            setCode('')
+            setServerMessage('')
+            setSubmit(false)
         } 
-        else if (navigatin === false ){setMode('login'); setNavigain(undefined);}
+        else if (navigatin === 'second-state' ){
+            setNavigain('first-state')
+        }
+        else if (navigatin === "third-state"){
+            setMode('login')
+            setNavigain('first-state')
+            setCode('')
+            setServerMessage('')
+            setSubmit(false)
+        }
     }
 
     const checkEmail = () => {
@@ -28,8 +45,25 @@ const RecoveryPage = function() {
     }
 
     const checkcode = async function () {
-        const data = {code: code}
-        const reqest = await fetch()
+        const data = {code: code, email: email}
+        const reqest = await fetch("http://localhost:3000/users/Recovery-Password-Code",
+            {
+                method: "POST",
+                headers:{
+                    "Content-Type" : "application/json"
+                },
+                body: JSON.stringify(data)
+            }
+        )
+        const response = await reqest.text()
+        if(await response === 'success'){
+            setNavigain('third-state')
+        }else if(await response === 'не верный код'){
+            setServerMessage(await response)
+        }
+        else{
+            setServerMessage('что-то пошоло не так попробуйте позже')
+        }
     }
 
     const clock = function(){
@@ -54,8 +88,7 @@ const RecoveryPage = function() {
                     }
                 )
                 if(reqest.ok) {
-                    setNavigain(true)
-                    setEmail('')
+                    setNavigain('second-state')
                     setServerMessage(`код отправлен будет действиьелен в течение ${Math.trunc(time / 60)}:${String(time % 60).padStart(2, "0")}`)
                 }
             }catch(err){
@@ -66,7 +99,7 @@ const RecoveryPage = function() {
         }
     }
 
-    if(navigatin === false){
+    if(navigatin === 'first-state'){
         return (
             <div id="recovery-email-body">
                 <label id="main-label">Востановление пароля</label>
@@ -74,13 +107,13 @@ const RecoveryPage = function() {
                 <input onChange={(e)=>{setEmail(e.target.value)}}></input>
                 <label id="mesage"></label>
                 <div id="button-complex">
-                    <label onClick={()=>{backlogick}} id="back">Назад</label>
+                    <label onClick={()=>{backlogick()}} id="back">Назад</label>
                     <button id="submit" onClick={()=>{if(checkEmail() == "") SendData()}}>Продолжить</button>
                 </div>
             </div>
         )
     }
-    else if(navigatin){
+    else if(navigatin === 'second-state'){
         return (
             <div id="recovery-code-body">
                 <label id="main-label">Востановление пароля</label>
@@ -88,10 +121,36 @@ const RecoveryPage = function() {
                 <label id="input-area">Ввведите код</label>
                 <input onChange={(e)=>{setCode(e.target.value)}}></input>
                 <div id="button-complex">
-                    <label onClick={()=>{backlogick}} id="back">Назад</label>
-                    <button onClick={()=>{}} id="submit">Продолжить</button>
+                    <label onClick={()=>{backlogick()}} id="back">Назад</label>
+                    <button onClick={()=>{checkcode()}} id="submit">Продолжить</button>
                 </div>
              </div>
+        )
+    }
+    else if(navigatin === 'third-state'){
+        return(
+            <div>
+                <label></label>
+                <label></label>
+                <div>
+                    <input></input>
+                    <button></button>
+                </div>
+                <label></label>
+                <input></input>
+                <div>
+                    <label></label>
+                    <button></button>
+                </div>
+            </div>
+        )
+    }
+    else if(status){
+        return(
+            <div>
+                <label></label>
+                <button></button>
+            </div>
         )
     }
 

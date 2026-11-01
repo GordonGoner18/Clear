@@ -3,7 +3,7 @@ import nodemailer from "nodemailer";
 import { InjectRepository } from "@nestjs/typeorm";
 import { User, RecoveryPasswordCode } from "./users.entity.js";
 import { Repository } from "typeorm";
-import { findeamildto } from "./users.find-email-for-recovery-dto.js";
+import { findeamildto, codedto } from "./dto/users.find-email-for-recovery-dto.js";
 import crypto from "node:crypto";
 import bcrypt from 'bcrypt'
 
@@ -45,10 +45,16 @@ export class SendemailService{
             })
         }   
     }
-
-    async checkcode(body: findeamildto){
+    
+    async checkcode(body: codedto){
         const getcode = await this.RecoveryRepository.findOneBy({email: body.email})
-        if(getcode?.code ){}
+        const check = async () =>{
+            if(getcode) return await bcrypt.compare(body.code, getcode.code)
+        }
+        if(await check())
+            return "success"
+        else 
+            return "не верный код"
     }
 }
 

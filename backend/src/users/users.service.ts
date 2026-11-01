@@ -2,10 +2,10 @@ import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/co
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './users.entity.js';
-import { createdto } from './users.dto.js';
+import { createdto } from './dto/users.dto.js';
 import bcrypt from 'bcrypt';
-import { logindto } from './users.logindto.js';
-import { findeamildto } from './users.find-email-for-recovery-dto.js';
+import { logindto } from './dto/users.logindto.js';
+import { findeamildto } from './dto/users.find-email-for-recovery-dto.js';
 
 @Injectable()
 export class UsersService {
