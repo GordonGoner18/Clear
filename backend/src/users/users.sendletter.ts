@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { ConflictException, Injectable } from "@nestjs/common";
 import nodemailer from "nodemailer";
 import { InjectRepository } from "@nestjs/typeorm";
 import { User, RecoveryPasswordCode } from "./users.entity.js";
@@ -6,6 +6,8 @@ import { Repository } from "typeorm";
 import { findeamildto, codedto } from "./dto/users.find-email-for-recovery-dto.js";
 import crypto from "node:crypto";
 import bcrypt from 'bcrypt'
+import { CODE_LIMIT_MS } from "./constants/users.const.js";
+
 
 @Injectable()
 export class SendemailService{
@@ -22,29 +24,41 @@ export class SendemailService{
     },
     });
 
-    async findemail(body: findeamildto){
-        return await this.userRepository.findOneBy({email:body.email})
-    }
-
+    
     async SendEmail(body: findeamildto){
-        if(await this.findemail(body)){
+        const exist = await this.userRepository.findOneBy({email:body.email})
+        const codetable = await this.RecoveryRepository.findOneBy({email: body.email})
+        const now = () => Date.now()
+        if(exist && codetable && (now() - codetable?.createTime.getTime()) <= CODE_LIMIT_MS ){
+            const diffrens = now() - codetable.createTime.getTime()
+            if(diffrens <= CODE_LIMIT_MS ) throw new ConflictException(`код уже отправлен и действителен еще ${Math.trunc((CODE_LIMIT_MS - diffrens) / 1000 / 60)}:${String(Math.trunc((CODE_LIMIT_MS - diffrens) / 1000 % 60)).padStart(2, "0")}`)
+        }else if(exist && !codetable){
             const code = crypto.randomInt(0, 999999)
             const CodeHash = await bcrypt.hash(String(code), 10);
-            const enxist = await this.RecoveryRepository.findOneBy({email:body.email})
-            if(enxist){
-                enxist.code = CodeHash
-                await this.RecoveryRepository.save(enxist)
-            }
-            else
-                await this.RecoveryRepository.save({code: CodeHash, email: body.email})
+            const createTime = new Date()
+            await this.RecoveryRepository.save({email: exist.email, code: CodeHash, createTime: createTime})
             await this.transporter.sendMail({
                 from: process.env.SMTP_USER,
                 to: body.email,
                 text: `Код для востановления пароля от ${body.email} : ${code}`,
                 subject: "Востановление пароля"
             })
-        }   
+        }else if(exist && codetable && (now() - codetable?.createTime.getTime()) >= CODE_LIMIT_MS){
+            await this.RecoveryRepository.delete({email: body.email})
+            const code = crypto.randomInt(0, 999999)
+            const CodeHash = await bcrypt.hash(String(code), 10);
+            const createTime = new Date()
+            await this.RecoveryRepository.save({email: exist.email, code: CodeHash, createTime: createTime})
+            await this.transporter.sendMail({
+                from: process.env.SMTP_USER,
+                to: body.email,
+                text: `Код для востановления пароля от ${body.email} : ${code}`,
+                subject: "Востановление пароля"
+            })
+        }
     }
+    
+
     
     async checkcode(body: codedto){
         const getcode = await this.RecoveryRepository.findOneBy({email: body.email})
@@ -56,5 +70,6 @@ export class SendemailService{
         else 
             return "не верный код"
     }
+
 }
 

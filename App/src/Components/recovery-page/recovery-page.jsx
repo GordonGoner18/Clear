@@ -6,7 +6,7 @@ import { checkEmail, checkPassword } from "../../utils/validation.js"
 
 const RecoveryPage = function({SetMode}) {
     
-    const [time, SetTime] = useState(300)
+    const [time, SetTime] = useState(0)
     const [navigatin, setNavigain] = useState("first-state")
     const [email, setEmail] = useState("")
     const [code, setCode] = useState("")
@@ -14,8 +14,9 @@ const RecoveryPage = function({SetMode}) {
     const [serverMessage, setServerMessage] = useState(false)
     const [newPassword, setNewPassword] = useState('')
     const [newPasswordReaped, setNewPasswordReaped] = useState('')
-    const [status, setStatus] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
+    const [started, setStarted] = useState(false)
+    const [errorMessage, setErrorMessage] = useState('')
 
     const backlogick = function(){
         if(navigatin === "first-state"){
@@ -67,38 +68,60 @@ const RecoveryPage = function({SetMode}) {
     }
 
     const checkcode = async function () {
-        const data = {code: code, email: email}
-        const reqest = await fetch("http://localhost:3000/users/Recovery-Password-Code",
-            {
-                method: "POST",
-                headers:{
-                    "Content-Type" : "application/json"
-                },
-                body: JSON.stringify(data)
+        if(code !== ""){
+            const data = {code: code, email: email}
+            try{
+                const reqest = await fetch("http://localhost:3000/users/Recovery-Password-Code",
+                    {
+                        method: "POST",
+                        headers:{
+                            "Content-Type" : "application/json"
+                        },
+                        body: JSON.stringify(data)
+                    }
+                )
+                const response = await reqest.text()
+                if(await response === 'success'){
+                    setNavigain('third-state')
+                    setServerMessage('')
+                }else if(await response === 'не верный код'){
+                    setErrorMessage(await response)
+                }
+                else{
+                    setServerMessage('что-то пошло не так попробуйте позже')
+                }
+            }catch(err){
+                setErrorMessage(err)
             }
-        )
-        const response = await reqest.text()
-        if(await response === 'success'){
-            setNavigain('third-state')
-            setServerMessage('')
-        }else if(await response === 'не верный код'){
-            setServerMessage(await response)
-        }
-        else{
-            setServerMessage('что-то пошло не так попробуйте позже')
+        }else{
+            setErrorMessage('введите код')
         }
     }
 
-    const clock = function(){
-        useEffect(()=>{
-            const id = setInterval(()=>{SetTime(time - 1)},1000)
-            return ()=>{clearInterval(id)}
-        },[time])
-    }
+    useEffect(()=>{
+        const id = setInterval(()=>{
+            if(started)
+                if(time !== 0) {
+                    SetTime(time - 1)
+                    setServerMessage(`код отправлен будет действителен в течение ${Math.trunc(time / 60)}:${String(time % 60).padStart(2, "0")}`)
+                }
+                else{
+                    setServerMessage('Срок действия кода истек. Нажмите чтоб отпрвить повторно')
+                    setStarted(false)
+                    setSubmit(false)
+                }
+        }, 1000)
+        return () => clearInterval(id)
+    }, [time, started])
 
+    useEffect(()=>{
+        setServerMessage('')
+        return () =>{}
+    },[code])
+    
     const SendData = async function(){
         setSubmit(false)
-        if(!submid && checkEmail(email) === ""){
+        if(!submid && checkEmail(email) === "" && time === 0){
             const UserData = {email: email}
             try{
                 const reqest = await fetch("http://localhost:3000/users/Recovery-Password",
@@ -113,7 +136,8 @@ const RecoveryPage = function({SetMode}) {
                 if(reqest.ok) {
                     setSubmit(true)
                     setNavigain('second-state')
-                    setServerMessage(`код отправлен будет действителен в течение ${Math.trunc(time / 60)}:${String(time % 60).padStart(2, "0")}`)
+                    setStarted(true)
+                    SetTime(300)
                 }
             }catch(err){
                 setSubmit(false)
@@ -131,7 +155,7 @@ const RecoveryPage = function({SetMode}) {
                 <label id="main-label">Востановление пароля</label>
                 <label id="input-area">Ваш email</label>
                 <input className="input-area" value={email} onChange={(e)=>{setEmail(e.target.value)}}></input>
-                <label id="message">{serverMessage}</label>
+                <label className="message">{serverMessage}</label>
                 <div id="button-complex">
                     <label onClick={()=>{backlogick()}} id="back">Назад</label>
                     <button id="submit" onClick={()=>{SendData()}}>Продолжить</button>
@@ -145,7 +169,8 @@ const RecoveryPage = function({SetMode}) {
                 <label id="main-label">Востановление пароля</label>
                 <label id="input-area">Введите код</label>
                 <input className="input-area" value={code} onChange={(e)=>{setCode(e.target.value)}}></input>
-                <label id="message">{serverMessage}</label>
+                <label onClick={()=>{SendData()}} className="message">{serverMessage}</label>
+                <label className="message">{errorMessage}</label>
                 <div id="button-complex">
                     <label onClick={()=>{backlogick()}} id="back">Назад</label>
                     <button onClick={()=>{checkcode()}} id="submit">Продолжить</button>
@@ -164,7 +189,7 @@ const RecoveryPage = function({SetMode}) {
                 </div>
                 <label className="info-labels">Повторите пароль</label>
                 <input value={newPasswordReaped} onChange={(e)=> {setNewPasswordReaped(e.target.value)}} className="input-area" type={showPassword ? "text" : "password"}></input>
-                <label id="message">{serverMessage}</label>
+                <label className="message">{serverMessage}</label>
                 <div id="button-complex">
                     <label onClick={()=>{backlogick()}} id="back">Назад</label>
                     <button id="submit" onClick={()=>{SendNewPassword()}}>Продолжить</button>

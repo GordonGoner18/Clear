@@ -79,7 +79,7 @@
     border-radius: 10px;
 }
 
-#message{
+.message{
     font-size: 12px;
     max-width: 300px;
     color: red;

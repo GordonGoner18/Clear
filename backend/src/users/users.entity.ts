@@ -22,4 +22,6 @@ export class RecoveryPasswordCode{
     code: string;
     @Column({unique: true})
     email: string;
+    @Column({default: new Date(0)})
+    createTime: Date;
 }

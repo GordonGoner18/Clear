@@ -74,7 +74,7 @@ const Reg = function({ SetMode }){
     
     return(
         <div id="login-body">
-            <label id="main-label">Зраегистрироватся</label>
+            <label id="main-label">Зарегистрироваться</label>
             <div id="switchmode"><button onClick={()=>SetMode('login')}>Вход</button><button className="active" onClick={()=>SetMode('reg')}>Регистрация</button></div>
             <input value={email} onChange={(e)=>{setEmail(e.target.value)}} className="input-area" placeholder="Введите email"></input>
             <input value={userName} onChange={(e)=>{setUserName(e.target.value)}} className="input-area" placeholder="Введите ваше имя"></input>
