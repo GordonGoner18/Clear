@@ -146,6 +146,7 @@ const RecoveryPage = function({SetMode}) {
                     setNavigain('second-state')
                     setStarted(true)
                     SetTime(300)
+                    setErrorMessage('')
                 }else{
                     const response = await reqest.json()
                     setErrorMessage(response.message)
