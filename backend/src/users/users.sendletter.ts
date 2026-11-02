@@ -31,18 +31,18 @@ export class SendemailService{
         const now = () => Date.now()
         if(exist && codetable && (now() - codetable?.createTime.getTime()) <= CODE_LIMIT_MS ){
             const diffrens = now() - codetable.createTime.getTime()
-            if(diffrens <= CODE_LIMIT_MS ) throw new ConflictException(`код уже отправлен и действителен еще ${Math.trunc((CODE_LIMIT_MS - diffrens) / 1000 / 60)}:${String(Math.trunc((CODE_LIMIT_MS - diffrens) / 1000 % 60)).padStart(2, "0")}`)
+            throw new ConflictException(`код уже отправлен и действителен еще ${Math.trunc((CODE_LIMIT_MS - diffrens) / 1000 / 60)}:${String(Math.trunc((CODE_LIMIT_MS - diffrens) / 1000 % 60)).padStart(2, "0")}`)
         }else if(exist && !codetable){
-            const code = crypto.randomInt(0, 999999)
-            const CodeHash = await bcrypt.hash(String(code), 10);
-            const createTime = new Date()
-            await this.RecoveryRepository.save({email: exist.email, code: CodeHash, createTime: createTime})
-            await this.transporter.sendMail({
-                from: process.env.SMTP_USER,
-                to: body.email,
-                text: `Код для востановления пароля от ${body.email} : ${code}`,
-                subject: "Востановление пароля"
-            })
+        const code = crypto.randomInt(0, 999999)
+        const CodeHash = await bcrypt.hash(String(code), 10);
+        const createTime = new Date()
+        await this.RecoveryRepository.save({email: exist.email, code: CodeHash, createTime: createTime})
+        await this.transporter.sendMail({
+            from: process.env.SMTP_USER,
+            to: body.email,
+            text: `Код для востановления пароля от ${body.email} : ${code}`,
+            subject: "Востановление пароля"
+        })
         }else if(exist && codetable && (now() - codetable?.createTime.getTime()) >= CODE_LIMIT_MS){
             await this.RecoveryRepository.delete({email: body.email})
             const code = crypto.randomInt(0, 999999)
@@ -57,19 +57,22 @@ export class SendemailService{
             })
         }
     }
-    
 
-    
+
+
     async checkcode(body: codedto){
         const getcode = await this.RecoveryRepository.findOneBy({email: body.email})
+        const now = () => Date.now()
         const check = async () =>{
-            if(getcode) return await bcrypt.compare(body.code, getcode.code)
+            if(!getcode) throw new ConflictException('ошибка попробуйте позже')
+            else if(getcode && (now() - getcode.createTime.getTime()) <= CODE_LIMIT_MS) return await bcrypt.compare(body.code, getcode.code)
+            else if(getcode && (now() - getcode.createTime.getTime()) >= CODE_LIMIT_MS) throw new ConflictException('код просрочен')
         }
         if(await check())
             return "success"
         else 
             return "не верный код"
-    }
+        }
 
 }
 

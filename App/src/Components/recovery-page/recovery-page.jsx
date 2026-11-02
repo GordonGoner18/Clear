@@ -25,10 +25,12 @@ const RecoveryPage = function({SetMode}) {
             setCode('')
             setServerMessage('')
             setSubmit(false)
+            setErrorMessage('')
         } 
         else if (navigatin === 'second-state' ){
             setNavigain('first-state')
             setServerMessage('')
+            setErrorMessage('')
         }
         else if (navigatin === "third-state"){
             SetMode('login')
@@ -80,15 +82,21 @@ const RecoveryPage = function({SetMode}) {
                         body: JSON.stringify(data)
                     }
                 )
-                const response = await reqest.text()
-                if(await response === 'success'){
-                    setNavigain('third-state')
-                    setServerMessage('')
-                }else if(await response === 'не верный код'){
-                    setErrorMessage(await response)
-                }
-                else{
-                    setServerMessage('что-то пошло не так попробуйте позже')
+
+                if(reqest.ok){
+                    const response = await reqest.text()
+                    if(await response === 'success'){
+                        setNavigain('third-state')
+                        setServerMessage('')
+                    }else if(await response === 'не верный код'){
+                        setErrorMessage(await response)
+                    }
+                    else{
+                        setServerMessage('что-то пошло не так попробуйте позже')
+                    }
+                }else{
+                    const ErrorResponse = await reqest.json()
+                    setErrorMessage(ErrorResponse.message)
                 }
             }catch(err){
                 setErrorMessage(err)
@@ -115,7 +123,7 @@ const RecoveryPage = function({SetMode}) {
     }, [time, started])
 
     useEffect(()=>{
-        setServerMessage('')
+        setErrorMessage('')
         return () =>{}
     },[code])
     
@@ -138,6 +146,9 @@ const RecoveryPage = function({SetMode}) {
                     setNavigain('second-state')
                     setStarted(true)
                     SetTime(300)
+                }else{
+                    const response = await reqest.json()
+                    setErrorMessage(response.message)
                 }
             }catch(err){
                 setSubmit(false)
@@ -156,6 +167,7 @@ const RecoveryPage = function({SetMode}) {
                 <label id="input-area">Ваш email</label>
                 <input className="input-area" value={email} onChange={(e)=>{setEmail(e.target.value)}}></input>
                 <label className="message">{serverMessage}</label>
+                <label className="message">{errorMessage}</label>
                 <div id="button-complex">
                     <label onClick={()=>{backlogick()}} id="back">Назад</label>
                     <button id="submit" onClick={()=>{SendData()}}>Продолжить</button>
