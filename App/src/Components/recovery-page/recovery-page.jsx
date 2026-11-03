@@ -55,13 +55,18 @@ const RecoveryPage = function({SetMode}) {
                         body: JSON.stringify(data)
                     }
                 )
-                const reqest_text = await reqest.text() 
-                if(reqest_text === "success"){
-                    setNavigain('foth')
-
+                if(reqest.ok){
+                    const reqest_text = await reqest.text() 
+                    if(reqest_text === "success"){
+                        setNavigain('foth')
+                    }
+                    else{
+                        setServerMessage(reqest_text)
+                    }
                 }
                 else{
-                    setServerMessage(reqest_text)
+                    const response = await reqest.json()
+                    setErrorMessage(response.message)
                 }
             }catch(err){
                 setServerMessage('что-то пошло не так')
@@ -203,6 +208,7 @@ const RecoveryPage = function({SetMode}) {
                 <label className="info-labels">Повторите пароль</label>
                 <input value={newPasswordReaped} onChange={(e)=> {setNewPasswordReaped(e.target.value)}} className="input-area" type={showPassword ? "text" : "password"}></input>
                 <label className="message">{serverMessage}</label>
+                <label className="message">{errorMessage}</label>
                 <div id="button-complex">
                     <label onClick={()=>{backlogick()}} id="back">Назад</label>
                     <button id="submit" onClick={()=>{SendNewPassword()}}>Продолжить</button>

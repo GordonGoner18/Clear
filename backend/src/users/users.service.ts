@@ -6,6 +6,7 @@ import { createdto } from './dto/users.dto.js';
 import bcrypt from 'bcrypt';
 import { logindto } from './dto/users.logindto.js';
 import { setnewpasswordto } from './dto/users.setnewpasswordto.js';
+import { CODE_LIMIT_MS } from './constants/users.const.js';
 
 @Injectable()
 export class UsersService {
@@ -42,14 +43,14 @@ export class UsersService {
     async SetNewPassword(body: setnewpasswordto){
         const user = await this.userRepository.findOneBy({email: body.email})
         const codefrombd = await this.RecoveryRepository.findOneBy({email: body.email})
-        if(codefrombd?.code){
-            if(user && await bcrypt.compare(body.code, codefrombd.code)){
+        const now = () => Date.now()
+        if(user && codefrombd && (now() - codefrombd?.createTime.getTime()) <= CODE_LIMIT_MS ){
+            if(await bcrypt.compare(body.code, codefrombd.code)){
                 user.password = await bcrypt.hash(body.password, 10)
                 await this.userRepository.save(user)
+                await this.RecoveryRepository.delete({email: user.email})
                 return 'success'
-            }else{
-                return 'произошка ошибка попробуйте позже'
-            }
+            }else throw new ConflictException('ошибка кода')
         }else{
             return 'произошка ошибка попробуйте позже'
         }
