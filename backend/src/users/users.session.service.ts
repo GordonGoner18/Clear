@@ -24,7 +24,7 @@ export class SessionServce{
         const now = () => Date.now()
         if(!sesson) return null
         else if(now() >= sesson.expiresAt.getTime()) return null
-        return sesson.userId
+        return sesson
     }
 
     async removeAllSessions(userId: number){
