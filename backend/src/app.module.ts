@@ -4,7 +4,7 @@ import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
 import { UsersModule } from './users/users.module.js';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { RecoveryPasswordCode, User } from './users/users.entity.js';
+import { RecoveryPasswordCode, SessionCookie, User } from './users/users.entity.js';
 import { ConfigModule } from '@nestjs/config';
 
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
@@ -26,7 +26,7 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
       username: "timurp",
       database: "clear",
       password: "",
-      entities: [User,RecoveryPasswordCode],
+      entities: [User,RecoveryPasswordCode, SessionCookie],
       synchronize: true
     }),UsersModule,
   ],

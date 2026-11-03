@@ -2,7 +2,7 @@ import { Body, Controller, HttpCode, Patch, Post } from '@nestjs/common';
 import { UsersService } from './users.service.js';
 import { createdto } from './dto/users.dto.js';
 import { logindto } from './dto/users.logindto.js';
-import { SendemailService } from './users.sendletter.js';
+import { SendemailService } from './users.sendletter.service.js';
 import { codedto, findeamildto } from './dto/users.find-email-for-recovery-dto.js';
 import { setnewpasswordto } from './dto/users.setnewpasswordto.js';
 

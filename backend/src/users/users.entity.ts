@@ -25,3 +25,15 @@ export class RecoveryPasswordCode{
     @Column({default: new Date(0)})
     createTime: Date;
 }
+
+@Entity('SessionCookie')
+export class SessionCookie{
+    @PrimaryGeneratedColumn()
+    id: number;
+    @Column({unique: true})
+    token: string;
+    @Column()
+    userId: number;
+    @Column()
+    expiresAt: Date;
+}

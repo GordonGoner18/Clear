@@ -7,11 +7,13 @@ import bcrypt from 'bcrypt';
 import { logindto } from './dto/users.logindto.js';
 import { setnewpasswordto } from './dto/users.setnewpasswordto.js';
 import { CODE_LIMIT_MS } from './constants/users.const.js';
+import { SessionServce } from './users.session.service.js';
 
 @Injectable()
 export class UsersService {
     constructor(@InjectRepository(User) private userRepository: Repository<User>,
-         @InjectRepository(RecoveryPasswordCode) private RecoveryRepository: Repository<RecoveryPasswordCode>){}
+         @InjectRepository(RecoveryPasswordCode) private RecoveryRepository: Repository<RecoveryPasswordCode>,
+        private readonly SessionService: SessionServce){}
 
     async CreateUser(body: createdto){
         const exists = await this.userRepository.findOneBy({email: body.email})
@@ -49,6 +51,7 @@ export class UsersService {
                 user.password = await bcrypt.hash(body.password, 10)
                 await this.userRepository.save(user)
                 await this.RecoveryRepository.delete({email: user.email})
+                await this.SessionService.removeAllSessions(user.id)
                 return 'success'
             }else throw new ConflictException('ошибка кода')
         }else{
