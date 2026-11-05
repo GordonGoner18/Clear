@@ -24,8 +24,8 @@ export class SessionServce{
         const now = () => Date.now()
         if(!sesson) return null
         else if(now() >= sesson.expiresAt.getTime()) return null
-        return sesson
-    }
+        return sesson.userId
+    }  
 
     async removeAllSessions(userId: number){
         await this.SessionRepository.delete({userId: userId})
@@ -38,6 +38,7 @@ export class SessionServce{
             await this.SessionRepository.delete({token: session.token})
         return null
     }
+
     
 }
 

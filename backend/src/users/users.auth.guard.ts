@@ -1,6 +1,5 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from "@nestjs/common";
-import { Observable } from "rxjs";
-import { SESSION_COOKIE_NAME, SESSION_LIMIT_MS } from "./constants/users.const.js";
+import { SESSION_COOKIE_NAME} from "./constants/users.const.js";
 import { SessionServce } from "./users.session.service.js";
 
 @Injectable()
@@ -13,8 +12,8 @@ export class AuthGuard implements CanActivate{
             throw new UnauthorizedException
         else{
             const session = await this.SessionService.findUserId(token)
-            if(!session) return false
-            request.userId = session.userId
+            if(!session) throw new UnauthorizedException
+            request.userId = session
         }
         return true                         
     }

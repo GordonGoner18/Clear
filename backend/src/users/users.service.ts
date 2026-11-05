@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { RecoveryPasswordCode, User } from './users.entity.js';
@@ -36,10 +36,16 @@ export class UsersService {
     
     async findUser(body: logindto){
         const user = await this.userRepository.findOneBy({email: body.email})
-
         if(!user || !(await bcrypt.compare(body.password, user.password)))
             throw new UnauthorizedException('Неверный email или пароль');
-        return {id: user.id, name: user.name}
+        return {id: user.id, name: user.name, email: user.email}
+    }
+
+    async findUserById(id: number): Promise<{id: number, name: string; email: string }> {
+        const user = await this.userRepository.findOneBy({id: id})
+        if(!user)
+            throw new NotFoundException()
+        return { id: user.id, name: user.name, email: user.email }
     }
 
     async SetNewPassword(body: setnewpasswordto){

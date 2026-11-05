@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./header.css"
 
-const Header = function({SetMode}){
+const Header = function({SetMode, auntification, }){
     return(
         <div id="Header-body">
             <nav id="header-nav">
@@ -9,7 +9,7 @@ const Header = function({SetMode}){
                 <a onClick={()=>{SetMode('fast-check')}} id="fast-start">Быстрая проверка</a>
                 <a id="about">О нас</a>
                 <a id="help">Помощь</a>
-                <a onClick={()=>{SetMode('login')}} id="acount">Личный кабинет</a>
+                <a onClick={()=>SetMode('prsonal-account')} id="acount">Личный кабинет</a>
             </nav>
         </div>
     );

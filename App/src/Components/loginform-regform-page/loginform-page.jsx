@@ -4,7 +4,7 @@ import openeye from "../../icons/eye-open.png"
 import closeeye from "../../icons/eye-close.png"
 import { checkEmail, checkCheckBox } from "../../utils/validation.js"
 
-const Loginform = function({SetMode, SetLogin}){
+const Loginform = function({SetMode, SetLogin, SetUser}){
 
     const [showPassword, setShowPassword] = useState(false)
     const [send, setSend] = useState(false)
@@ -20,6 +20,7 @@ const Loginform = function({SetMode, SetLogin}){
         if(password === "") return checkEmail(email) || "Введите пароль"
         return checkEmail(email) || checkCheckBox(checkbox)
     }
+
 
     
     const loginreqest = async function () {
@@ -39,6 +40,7 @@ const Loginform = function({SetMode, SetLogin}){
                         headers: {
                             "Content-Type" : "application/json"
                         },
+                        credentials: 'include',
                         body: JSON.stringify(login_data)
                     })
                     
@@ -50,6 +52,8 @@ const Loginform = function({SetMode, SetLogin}){
                         setPassword("");
                         setSubmit(true);
                         SetLogin(true)
+                        SetMode('prsonal-account')
+                        SetUser({name: result.name, email: result.email})
                     }else{
                         setSend(false)
                         setSubmit(false)
