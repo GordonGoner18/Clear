@@ -92,14 +92,42 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-    gap: 10px;
     color: white;
-    align-items: center;
     justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.personal-info-felds{
+    margin-left: 10%;
+    width: 60%;
+    height: 10%;
+    background-color: rgb(37, 37, 37);
+    padding: 2% 2%;
+    border-radius: 5px;
+    border-top-style: solid;
+    border-width: 2px;
+    border-color: white;
+}
+
+.personal-info-felds p{
+    background-color: rgb(172, 172, 172);
+    
+}
+
+.search{
+    width: 40%;
+    height: 5%;
+    border-radius: 5px;
+    border-style: solid;
+    border-color: black;
+    border-width: 3px;
 }
 
 #Hello-label{
     font-family: 'Oswald', sans-serif;
     font-size: 50px;
 }
+
+
 

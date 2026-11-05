@@ -27,7 +27,7 @@ const Reg = function({ SetMode }){
             name: userName,
             email: email,
             accept: checkbox,
-            password: password
+            password: password,
         }
 
         if(firstError() === "" && !submid){

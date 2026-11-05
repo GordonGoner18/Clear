@@ -17,14 +17,12 @@ export class UsersService {
 
     async CreateUser(body: createdto){
         const exists = await this.userRepository.findOneBy({email: body.email})
-
         if(exists){
             throw new ConflictException('Этот email уже используется')
         }
-
         const passwordHash = await bcrypt.hash(body.password, 10);
-
         const User = this.userRepository.create({
+            regdate: new Date(),
             name: body.name,
             email: body.email,
             password: passwordHash,
@@ -38,14 +36,14 @@ export class UsersService {
         const user = await this.userRepository.findOneBy({email: body.email})
         if(!user || !(await bcrypt.compare(body.password, user.password)))
             throw new UnauthorizedException('Неверный email или пароль');
-        return {id: user.id, name: user.name, email: user.email}
+        return {id: user.id, name: user.name, email: user.email, regdate: user.regdate}
     }
 
-    async findUserById(id: number): Promise<{id: number, name: string; email: string }> {
+    async findUserById(id: number): Promise<{id: number, name: string; email: string, regdate: Date }> {
         const user = await this.userRepository.findOneBy({id: id})
         if(!user)
             throw new NotFoundException()
-        return { id: user.id, name: user.name, email: user.email }
+        return { id: user.id, name: user.name, email: user.email, regdate: user.regdate }
     }
 
     async SetNewPassword(body: setnewpasswordto){

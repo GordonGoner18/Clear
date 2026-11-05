@@ -11,7 +11,6 @@ import PersonalAccount from './Components/personal-account/personal-account.jsx'
 
 function App() {
   const [mode, SetMode] = useState('home')
-  const [login, SetLogin] = useState(false)
   const [user, SetUser] = useState(null)
   
   const auntification = async function() {
@@ -47,43 +46,43 @@ function App() {
     case 'home':
       return(
         <div className='conteiner'>
-          <Header SetMode={SetMode} auntification={auntification}/>
+          <Header SetMode={SetMode}/>
           <Home/>
         </div>
       )
     case 'login':
         return(
           <div className='conteiner'>
-          <Header SetMode={SetMode} auntification={auntification}/>
-          {login? <div>Получилось</div>: <Loginform SetLogin={SetLogin} SetMode={SetMode} SetUser={SetUser}/>}
+          <Header SetMode={SetMode}/>
+          <Loginform SetMode={SetMode} SetUser={SetUser}/>  
         </div>
       )
       case 'succes-reg-message': 
       return(
         <div className='conteiner'>
-          <Header SetMode={SetMode} auntification={auntification}/>
+          <Header SetMode={SetMode}/>
           <SuccessRegmessage SetMode={SetMode}/>
         </div>
       )
       case 'reg':
         return(
           <div className='conteiner'>
-              <Header SetMode={SetMode} auntification={auntification}/>
+              <Header SetMode={SetMode}/>
               <Reg SetMode={SetMode}/>
             </div>
           )
       case 'recovery-password':
         return(
           <div className='conteiner'>
-            <Header SetMode={SetMode} auntification={auntification}/>
+            <Header SetMode={SetMode}/>
             <RecoveryPage SetMode={SetMode}/>
           </div>
         )
       case 'prsonal-account':
         return(
           <div className='conteiner'>
-            <Header SetMode={SetMode} auntification={auntification}/>
-            {user? <PersonalAccount SetMode={SetMode} SetUser={SetUser} user={user}/>: <Loginform SetLogin={SetLogin} SetMode={SetMode} SetUser={SetUser}/>}
+            <Header SetMode={SetMode}/>
+            {user? <PersonalAccount SetMode={SetMode} SetUser={SetUser} user={user}/>: <Loginform SetMode={SetMode} SetUser={SetUser}/>}
           </div>
         )
   }

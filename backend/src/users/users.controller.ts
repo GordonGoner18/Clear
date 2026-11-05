@@ -66,7 +66,7 @@ export class UsersController {
         if(!UserId) throw new UnauthorizedException();
         const user = await this.UsersService.findUserById(UserId)
         if(!user) throw new NotFoundException('Пользователь не найден')
-        return {name: user.name, email: user.email}
+        return {name: user.name, email: user.email, regdate: user.regdate}
     }
 
     @Post('logout')

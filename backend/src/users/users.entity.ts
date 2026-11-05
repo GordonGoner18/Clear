@@ -12,6 +12,8 @@ export class User{
     email: string;
     @Column()
     accept: boolean;
+    @Column({nullable: true})
+    regdate: Date;
 }
 
 @Entity('RecoveryPasswordCode')

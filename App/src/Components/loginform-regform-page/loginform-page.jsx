@@ -4,7 +4,7 @@ import openeye from "../../icons/eye-open.png"
 import closeeye from "../../icons/eye-close.png"
 import { checkEmail, checkCheckBox } from "../../utils/validation.js"
 
-const Loginform = function({SetMode, SetLogin, SetUser}){
+const Loginform = function({SetMode, SetUser}){
 
     const [showPassword, setShowPassword] = useState(false)
     const [send, setSend] = useState(false)
@@ -51,9 +51,8 @@ const Loginform = function({SetMode, SetLogin, SetUser}){
                         setEmail("");
                         setPassword("");
                         setSubmit(true);
-                        SetLogin(true)
                         SetMode('prsonal-account')
-                        SetUser({name: result.name, email: result.email})
+                        SetUser({name: result.name, email: result.email, regdate: result.regdate})
                     }else{
                         setSend(false)
                         setSubmit(false)

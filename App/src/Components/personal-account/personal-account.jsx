@@ -11,11 +11,18 @@ import exit from '../../icons/exit.png'
 const PersonalAccount = function({SetMode,SetUser, user}){
     const[possition, setPossition] = useState('main')
     const[open, SetOpen] = useState(false)
-    const[search, SetSearch] = useState()
+    const[search, SetSearch] = useState('')
     const[errorMessage, setErrorMessage] = useState('')
 
+    const word = [
+        {}
+    ]
+
     useEffect(()=>{
-        SetOpen(true)
+        if(search !== '')
+            SetOpen(true)
+        else
+            SetOpen(false)
         return
     },[search])
 
@@ -46,17 +53,22 @@ const PersonalAccount = function({SetMode,SetUser, user}){
                 <label id="Hello-label">Здравствуйте {user?.name}</label>
                 <label id="email-label">{user?.email}</label>
                 {errorMessage ? <label id="err">{errorMessage}</label>: <label></label>}
-                <input onChange={(e)=>{SetSearch(e.target.value)}}></input>
+                <input className="search" onChange={(e)=>{SetSearch(e.target.value)}}></input>
                 {open ? <div id="open-search-container">
+                    <label>Пароль</label>
+                    <label>Имя</label>
+                    <label>Безопасность</label>
                 </div> : <div id="close-search-container"><label id="search-notfound"></label></div>}
             </div>
         )
         else if(possition === 'personal-info') return(
             <div className="body-info">
-                <label></label>
-                <label></label>
-                <label></label>
-                <label></label>
+                <p className="personal-info-felds">Имя</p>
+                <label className="personal-info-felds">{user.name}</label>
+                <p className="personal-info-felds">Почта</p>
+                <label className="personal-info-felds">{user.email}</label>
+                <p className="personal-info-felds">Дата регистрации</p>
+                <label className="personal-info-felds">{new Date(user.regdate).toLocaleDateString('ru-RU')}</label>
             </div>
         )
         else if(possition === 'safaty-info') return(
@@ -64,12 +76,12 @@ const PersonalAccount = function({SetMode,SetUser, user}){
                 <label></label>
                 <label></label>
                 <label></label>
-                <label></label>
+                <label>Удалить аккаунт</label>
             </div>
         )
         else if(possition === 'data-info') return(
             <div className="body-info">
-                <label></label>
+                <label>Какая-то информация</label>
                 <label></label>
                 <label></label>
                 <label></label>

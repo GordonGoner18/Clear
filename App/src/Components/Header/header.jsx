@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./header.css"
 
-const Header = function({SetMode, auntification, }){
+const Header = function({SetMode}){
     return(
         <div id="Header-body">
             <nav id="header-nav">
