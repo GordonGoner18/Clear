@@ -115,9 +115,21 @@
     
 }
 
-.search{
+#search-complex{
     width: 40%;
     height: 5%;
+    display: flex;
+    gap: 10px;
+}
+
+#search-complex img{
+    width: 30px;
+    height: 100%;
+}
+
+.search{
+    width: 100%;
+    height: 100%;
     border-radius: 5px;
     border-style: solid;
     border-color: black;
@@ -129,5 +141,71 @@
     font-size: 50px;
 }
 
+#pleace-area{
+    width: 50%;
+    height: 100%;
+    background-color: rgb(76, 76, 76);
+    display: flex;
+    flex-direction: column;
+    gap: 10%;
+    border-radius: 10px;
+    border-left-style: solid;
+    border-right-style: solid;
+    border-width: 3px;
+    border-color: black;
+}
 
+.safaty-info-cntainer{
+    display: flex;
+    gap: 10%;
+    margin-left: 20px;
+    margin-top: 10px;
+}
 
+#accept-delete-form{
+    margin: auto;
+    width: 30%;
+    height: 50%;
+    background-color: rgb(111, 111, 111);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    border-style: solid;
+    border-width: 3px;
+    border-color: black;
+    gap: 15%;
+}
+
+#accept-delete-form label{
+    color: white;
+    font-family: 'Oswald', sans-serif;
+    font-size: 2rem;
+}
+
+#accept-delete-form button{
+    border-radius: 5px;
+}
+
+#accept-button{
+    width: 60%;
+    height: 10%;
+    background-color: rgb(210, 240, 244);
+}
+
+#open-search-container{
+    width: 40%;
+    height: 5%;
+    display: flex;
+    align-items: center;
+    background-color: rgb(76, 76, 76);
+    border-radius: 5px;
+    border-style: solid;
+    border-width: 3px;
+    border-color: black;
+}
+
+#open-search-container label{
+    margin: auto;
+}

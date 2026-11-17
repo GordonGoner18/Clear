@@ -54,7 +54,7 @@ function App() {
         return(
           <div className='conteiner'>
           <Header SetMode={SetMode}/>
-          <Loginform SetMode={SetMode} SetUser={SetUser}/>  
+          <Loginform SetMode={SetMode} SetUser={SetUser} auntification={auntification}/>  
         </div>
       )
       case 'succes-reg-message': 

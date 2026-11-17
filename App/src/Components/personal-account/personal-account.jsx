@@ -6,6 +6,10 @@ import home from '../../icons/home.png'
 import data from '../../icons/data.png'
 import personaldata from '../../icons/personaldata.png'
 import exit from '../../icons/exit.png'
+import seak from '../../icons/seak.png'
+import openeye from "../../icons/eye-open.png"
+import closeeye from "../../icons/eye-close.png"
+import { checkName } from "../../utils/validation"
 
 
 const PersonalAccount = function({SetMode,SetUser, user}){
@@ -13,19 +17,45 @@ const PersonalAccount = function({SetMode,SetUser, user}){
     const[open, SetOpen] = useState(false)
     const[search, SetSearch] = useState('')
     const[errorMessage, setErrorMessage] = useState('')
+    const[password, setPassword] = useState('')
+    const[showPassword, setShowPassword] = useState(false)
+    const[newName, setNewName] = useState('')
+    const[result, setResult] = useState([])
 
     const word = [
-        {}
+        {
+            title: "Безопасноть",
+            keywords: ["пароль", "сменить пароль", "безопасность", "защита", "сменить имя", "поменять имя", "редактировать имя", "имя", "редактировать email", "сменить email", "редактировать почту", "сменить почту", "активные сессии", "сессии", "двухэтапная аунтефикация", "Удалить аккаунт"],
+            possition: 'safaty-info'
+        },
+        {
+            title: "Личные данные",
+            keywords: ['данные', "личные данные", "email", "почта", "имя", "регистрация", "дата регистрации"],
+            possition: 'personal-info'
+        },
+        {
+            title: "Данные",
+            keywords: ['данные'],
+            possition: 'data-info'
+        }
     ]
 
     useEffect(()=>{
-        if(search !== '')
+        if(search !== ''){
             SetOpen(true)
-        else
+            setResult(word.filter(({keywords}) => keywords.includes(search.trim().toLowerCase())))
+            console.log(result)
+        }else{
             SetOpen(false)
+        }
         return
     },[search])
 
+    useEffect(()=>{
+        setResult([])
+        SetSearch('')
+        return
+    },[possition])
 
     const exite = async function () {
         try{
@@ -46,6 +76,37 @@ const PersonalAccount = function({SetMode,SetUser, user}){
         }
     }
 
+    const editname = async function () {
+        const data = {
+            
+        }        
+    }
+
+    const delaccount = async function() {
+        const data = {
+            email: user.email,
+            password: password
+        }
+        
+        try{
+            const reqest = await fetch("http://localhost:3000/users/delete-acount",{
+                method: "DELETE",
+                headers: {
+                    "Content-Type" : "application/json"
+                },
+                body: JSON.stringify(data),
+                credentials: 'include'
+            })
+            if(reqest.ok){
+                SetMode('login')
+                SetUser(null)
+            }else{
+                setErrorMessage('не верный пароль')
+            }
+        }catch(err){
+            console.log(err)
+        }
+    }
 
     const checkPossition = function(){
         if(possition === 'main') return(
@@ -53,11 +114,9 @@ const PersonalAccount = function({SetMode,SetUser, user}){
                 <label id="Hello-label">Здравствуйте {user?.name}</label>
                 <label id="email-label">{user?.email}</label>
                 {errorMessage ? <label id="err">{errorMessage}</label>: <label></label>}
-                <input className="search" onChange={(e)=>{SetSearch(e.target.value)}}></input>
+                <div id="search-complex"><img src={seak} alt="seak"></img><input placeholder="поиск" className="search" onChange={(e)=>{SetSearch(e.target.value)}}></input></div>
                 {open ? <div id="open-search-container">
-                    <label>Пароль</label>
-                    <label>Имя</label>
-                    <label>Безопасность</label>
+                    <label onClick={()=>{if(result.length > 0)setPossition(result[0].possition)}}>{result.length > 0 && search !== '' ? result[0].title : 'ничего не нашлось'}</label>
                 </div> : <div id="close-search-container"><label id="search-notfound"></label></div>}
             </div>
         )
@@ -73,10 +132,15 @@ const PersonalAccount = function({SetMode,SetUser, user}){
         )
         else if(possition === 'safaty-info') return(
             <div className="body-info">
-                <label></label>
-                <label></label>
-                <label></label>
-                <label>Удалить аккаунт</label>
+                <div id="pleace-area">
+                    <div className="safaty-info-cntainer"><label className="topic">Дата регистрации</label><label className="info-felds">{new Date(user.regdate).toLocaleDateString('ru-RU')}</label></div>
+                    <div className="safaty-info-cntainer"><label className="topic">Редактировать имя</label><label className="info-felds"></label></div>
+                    <div className="safaty-info-cntainer"><label className="topic">Редактировать email</label><label className="info-felds"></label></div>
+                    <div className="safaty-info-cntainer"><label className="topic">Пароль</label><label className="info-felds"></label></div>
+                    <div className="safaty-info-cntainer"><label className="topic">Активные сессии</label><label className="info-felds"></label></div>
+                    <div className="safaty-info-cntainer"><label className="topic">Двухэтапная аунтефикация</label><label className="info-felds"></label></div>
+                    <div className="safaty-info-cntainer"><label onClick={()=>{setPossition('accept-password')}} className="topic">Удалить аккаунт</label><label className="info-felds"></label></div>
+                </div>
             </div>
         )
         else if(possition === 'data-info') return(
@@ -87,8 +151,19 @@ const PersonalAccount = function({SetMode,SetUser, user}){
                 <label></label>
             </div> 
         )
-    }
-
+        else if(possition === 'accept-password')return(
+                <div id="accept-delete-form">
+                    <label>Введите пароль от аккаунта</label>
+                    <div id="password-complex">
+                        <input value={password} onChange={(e)=>{setPassword(e.target.value)}} className="input-area" placeholder="Введите пароль" type={showPassword ? "text" : "password"}></input>
+                        <button id="eye-button" type="button" aria-label="Показать пароль" onClick={()=> setShowPassword(!showPassword)} ><img id="eye" src={showPassword ? openeye : closeeye} alt=""></img></button>
+                    </div>
+                    <p id="error-mesege">{errorMessage}</p>
+                    <button onClick={()=>{delaccount()}} id="accept-button">Подтвердить</button>
+                </div>
+            )
+        }
+    
     return(
         <div id="body">
             <div id="navigation">

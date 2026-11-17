@@ -2,7 +2,7 @@ import { ConflictException, Injectable, NotFoundException, UnauthorizedException
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { RecoveryPasswordCode, User } from './users.entity.js';
-import { createdto } from './dto/users.dto.js';
+import { createdto, deldto } from './dto/users.dto.js';
 import bcrypt from 'bcrypt';
 import { logindto } from './dto/users.logindto.js';
 import { setnewpasswordto } from './dto/users.setnewpasswordto.js';
@@ -62,4 +62,15 @@ export class UsersService {
             return 'произошка ошибка попробуйте позже'
         }
     }
+
+    async DeleteUser(body: deldto){
+        const user = await this.userRepository.findOneBy({email: body.email})
+        if(user){
+            if(await bcrypt.compare(body.password, user.password)){
+                await this.userRepository.delete({id: user.id})
+            }else throw new ConflictException('неверный пароль')
+        }else throw new NotFoundException('Пользователь не найден')
+    return true
+    }
+    
 }

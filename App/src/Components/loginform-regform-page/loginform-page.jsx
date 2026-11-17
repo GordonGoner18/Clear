@@ -52,7 +52,7 @@ const Loginform = function({SetMode, SetUser}){
                         setPassword("");
                         setSubmit(true);
                         SetMode('prsonal-account')
-                        SetUser({name: result.name, email: result.email, regdate: result.regdate})
+                        SetUser({name: result.name, email: result.email, regdate: result.regdate, id: result.id})
                     }else{
                         setSend(false)
                         setSubmit(false)

@@ -104,7 +104,7 @@ const RecoveryPage = function({SetMode}) {
                     setErrorMessage(ErrorResponse.message)
                 }
             }catch(err){
-                setErrorMessage(err)
+                setErrorMessage('Произошла ошибка')
             }
         }else{
             setErrorMessage('введите код')

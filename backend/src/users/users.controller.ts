@@ -1,6 +1,6 @@
-import { Body, Controller, Get, HttpCode, NotFoundException, Patch, Post, Req, Res, UnauthorizedException, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Patch, Post, Req, Res, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service.js';
-import { createdto } from './dto/users.dto.js';
+import { createdto, deldto } from './dto/users.dto.js';
 import { logindto } from './dto/users.logindto.js';
 import { SendemailService } from './users.sendletter.service.js';
 import { codedto, findeamildto } from './dto/users.find-email-for-recovery-dto.js';
@@ -79,6 +79,17 @@ export class UsersController {
             expires: new Date(0)
         })
         return true 
+    }
+
+    @Delete('delete-acount')
+    @UseGuards(AuthGuard)
+    async RemoveAccount(@Req() req: Request, @Res({passthrough: true}) res: Response, @Body() body: deldto){
+        const userSession = await this.SessionServise.findUserId(req.cookies[SESSION_COOKIE_NAME])
+        if(userSession){
+            await this.UsersService.DeleteUser(body)
+            await this.SessionServise.removeAllSessions(userSession)
+        }
+        return true
     }
 
 }
