@@ -4,7 +4,7 @@ import { createdto, deldto } from './dto/users.dto.js';
 import { logindto } from './dto/users.logindto.js';
 import { SendemailService } from './users.sendletter.service.js';
 import { codedto, findeamildto } from './dto/users.find-email-for-recovery-dto.js';
-import { setnewpasswordto } from './dto/users.setnewpasswordto.js';
+import { checkpassword, setnewname, setnewpasswordto } from './dto/users.setnewpasswordto.js';
 import { AuthGuard } from './users.auth.guard.js';
 import { SessionServce } from './users.session.service.js';
 import type { Response, Request } from 'express';
@@ -90,6 +90,16 @@ export class UsersController {
             await this.SessionServise.removeAllSessions(userSession)
         }
         return true
+    }
+
+    @Post('edite-name')
+    async checkPassword(@Body() body: checkpassword){
+        await this.UsersService.CheckPassword(body)
+    }
+
+    @Patch('set-new-name')
+    async SetNewName(@Body() body: setnewname){
+        await this.UsersService.SetNewName(body)
     }
 
 }

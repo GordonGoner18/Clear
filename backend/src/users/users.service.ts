@@ -5,7 +5,7 @@ import { RecoveryPasswordCode, User } from './users.entity.js';
 import { createdto, deldto } from './dto/users.dto.js';
 import bcrypt from 'bcrypt';
 import { logindto } from './dto/users.logindto.js';
-import { setnewpasswordto } from './dto/users.setnewpasswordto.js';
+import { checkpassword, setnewname, setnewpasswordto } from './dto/users.setnewpasswordto.js';
 import { CODE_LIMIT_MS } from './constants/users.const.js';
 import { SessionServce } from './users.session.service.js';
 
@@ -72,5 +72,23 @@ export class UsersService {
         }else throw new NotFoundException('Пользователь не найден')
     return true
     }
+
+    async CheckPassword(body: checkpassword){
+        const user = await this.userRepository.findOneBy({email: body.email})
+        if(user){
+            if(await bcrypt.compare(body.password, user.password)){
+                return
+            }else{
+                throw new ConflictException('неверный пароль')
+            }
+        }else throw new NotFoundException('Пользователь не найден')
+    }
+
+    async SetNewName(body: setnewname){
+        const user = await this.userRepository.findOneBy({email: body.email})
+        if(user) user.name = body.name
+        else throw new NotFoundException('пользователь не найден')
+        await this.userRepository.save(user)
+    }   
     
 }

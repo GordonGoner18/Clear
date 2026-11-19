@@ -7,8 +7,24 @@ const Header = function({SetMode}){
             <nav id="header-nav">
                 <a onClick={()=>{SetMode('home')}} id="prozrachno-label">Прозрачно</a>
                 <a onClick={()=>{SetMode('fast-check')}} id="fast-start">Быстрая проверка</a>
-                <a id="about">О нас</a>
-                <a id="help">Помощь</a>
+                <a onClick={()=>{
+                    const about = document.getElementById('about-body')
+                    if(about){
+                        about.scrollIntoView({
+                            behavior: "smooth",
+                            block: 'start'
+                        })
+                    }
+                }} id="about">О нас</a>
+                <a onClick={()=>{
+                    const help = document.getElementById('popular-qeustion-body')
+                    if(help){
+                        help.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        })
+                    }
+                }} id="help">Помощь</a>
                 <a onClick={()=>SetMode('prsonal-account')} id="acount">Личный кабинет</a>
             </nav>
         </div>

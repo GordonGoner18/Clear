@@ -73,19 +73,19 @@ const Reg = function({ SetMode }){
     }
     
     return(
-        <div id="login-body">
-            <label id="main-label">Зарегистрироваться</label>
-            <div id="switchmode"><button onClick={()=>SetMode('login')}>Вход</button><button className="active" onClick={()=>SetMode('reg')}>Регистрация</button></div>
-            <input value={email} onChange={(e)=>{setEmail(e.target.value)}} className="input-area" placeholder="Введите email"></input>
-            <input value={userName} onChange={(e)=>{setUserName(e.target.value)}} className="input-area" placeholder="Введите ваше имя"></input>
-            <div id="password-complex">
-                <input value={password} onChange={(e)=> {setPassword(e.target.value)}} className="input-area" placeholder="Введите пароль" type={showPassword ? "text" : "password"}></input>
-                <button id="eye-button" type="button" aria-label="Показать пароль" onClick={()=> setShowPassword(!showPassword)} ><img id="eye" src={showPassword ? openeye : closeeye} alt=""></img></button>
+        <div className="auth-login-body">
+            <label className="auth-title">Зарегистрироваться</label>
+            <div className="auth-switchmode"><button onClick={()=>SetMode('login')}>Вход</button><button className="active" onClick={()=>SetMode('reg')}>Регистрация</button></div>
+            <input value={email} onChange={(e)=>{setEmail(e.target.value)}} className="form-input" placeholder="Введите email"></input>
+            <input value={userName} onChange={(e)=>{setUserName(e.target.value)}} className="form-input" placeholder="Введите ваше имя"></input>
+            <div className="password-row">
+                <input value={password} onChange={(e)=> {setPassword(e.target.value)}} className="form-input" placeholder="Введите пароль" type={showPassword ? "text" : "password"}></input>
+                <button className="password-toggle" type="button" aria-label="Показать пароль" onClick={()=> setShowPassword(!showPassword)} ><img className="password-toggle-icon" src={showPassword ? openeye : closeeye} alt=""></img></button>
             </div>
-            <input value={passwordRepeat} onChange={(e)=> setPasswordReapet(e.target.value)} className="input-area" placeholder="Повторите пароль" type={showPassword ? "text" : "password"}></input>
-            <label onChange={(e)=>{setCheckBox(e.target.checked)}} id="accept-politic"><input id="accept" type="checkbox"></input>Я принимаю политику пользования</label>
+            <input value={passwordRepeat} onChange={(e)=> setPasswordReapet(e.target.value)} className="form-input" placeholder="Повторите пароль" type={showPassword ? "text" : "password"}></input>
+            <label onChange={(e)=>{setCheckBox(e.target.checked)}} className="auth-accept-politic"><input className="auth-accept" type="checkbox"></input>Я принимаю политику пользования</label>
             {ErrorMessage()}
-            <button onClick={()=>{setSend(true), reqest()}} id="continue">Продолжить</button>
+            <button onClick={()=>{setSend(true), reqest()}} className="auth-continue">Продолжить</button>
         </div> 
     )
 }

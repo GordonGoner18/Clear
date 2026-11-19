@@ -1,4 +1,4 @@
-#login-body{
+.auth-login-body{
     width: 100%;
     max-width: 400px;
     height: 500px;
@@ -11,70 +11,47 @@
     border-radius: 10px;
 }
 
-#eye{
-    height: 20px;
-    width: 20px;
-}
-
-#eye-button {
-    cursor: pointer;
-}
-
-.input-area{
-    width: 300px;
-    height: 40px;
-}
-
-#password-complex{
-    margin-left: 42px;
-    display: flex;
-    gap: 6px;
-}
-
-#forget-password{
-    align-self: flex-start;
-    margin-left: 50px;
-}
-
-#main-label{
+.auth-title{
     font-size: 30px;
     font-family: 'Oswald', sans-serif;
 }
 
-#accept-politic{
+.auth-accept-politic{
     font-family:'Oswald', sans-serif;
 }
 
-#accept{
+.auth-accept{
     cursor: pointer;
     width: 20px;
     height: 20px;
 }
 
-#switchmode{
+.auth-switchmode{
     width: 80%;
     height: 50px;
     display: flex;
 }
 
-#switchmode button {
+.auth-switchmode button {
     background-color: rgb(210, 240, 244);
     font-size: 20px;
     flex: 1;
 }
 
-#forget-password{
+.auth-forget-password{
+    align-self: flex-start;
+    margin-left: 50px;
     margin-top: 60px;
     font-size: 18px;
     font-family: 'Oswald', sans-serif;
     cursor: pointer;
 }
 
-#forget-password:hover{
+.auth-forget-password:hover{
     color: rgba(0, 0, 0, 0.677);
 }
 
-#continue{
+.auth-continue{
     width: 80%;
     height: 50px;
     font-size: 20px;
@@ -83,7 +60,7 @@
     cursor: pointer;
 }
 
-#switchmode button.active {
+.auth-switchmode button.active {
     background-color: rgb(200, 30, 30);
     color: white;
 }
@@ -93,4 +70,36 @@
     color: red;
     max-width: 300px;
     max-height: 30px;
+}
+
+.auth-login-body > .form-input,
+.auth-login-body > .password-row {
+    width: min(90%, 300px);
+}
+
+.auth-login-body .password-row {
+    position: relative;
+}
+
+.auth-login-body .password-row .form-input {
+    padding-right: 44px;
+}
+
+.auth-login-body .password-toggle {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 40px;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    border-radius: 5px;
+}
+
+.auth-login-body .password-toggle:focus-visible {
+    outline: 2px solid #3035c8;
+    outline-offset: -4px;
 }

@@ -1,8 +1,9 @@
-import { IsString, Equals } from "class-validator";
+import { IsString, Equals, Matches } from "class-validator";
 
 export class logindto{
     @IsString()
-    email: string;
+    @Matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, {message: 'неверный форма email'})
+    email: string
 
     @IsString()
     password: string;

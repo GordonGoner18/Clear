@@ -12,6 +12,8 @@
     align-items: center;
     font-family: "Comic Relief", system-ui;
     position: fixed top;
+    position: fixed;
+    z-index: 1000;    
 }
 
 #header-nav{

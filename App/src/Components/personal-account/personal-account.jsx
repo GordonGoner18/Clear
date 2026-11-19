@@ -9,10 +9,10 @@ import exit from '../../icons/exit.png'
 import seak from '../../icons/seak.png'
 import openeye from "../../icons/eye-open.png"
 import closeeye from "../../icons/eye-close.png"
-import { checkName } from "../../utils/validation"
+import { checkName, checkPassword } from "../../utils/validation"
 
 
-const PersonalAccount = function({SetMode,SetUser, user}){
+const PersonalAccount = function({SetMode,SetUser, user, auntification}){
     const[possition, setPossition] = useState('main')
     const[open, SetOpen] = useState(false)
     const[search, SetSearch] = useState('')
@@ -74,12 +74,59 @@ const PersonalAccount = function({SetMode,SetUser, user}){
             setErrorMessage('Произошла ошибка')
             setPossition('main')
         }
-    }
+    }        
+    const CheckPasswordForEdite = async function () {
+            if(checkPassword(password, password) === ''){
+                const data_password = {
+                    password: password,
+                    email: user.email
+                }
+                try{
+                    const reqest = await fetch("http://localhost:3000/users/edite-name",{
+                        method: "POST",
+                        headers: {
+                            "Content-Type" : "application/json"
+                        },
+                        body: JSON.stringify(data_password),
+                    })
+                    if(reqest.ok){
+                        setPossition('edite-password-2')
+                    }else{
+                        setErrorMessage('что то пошло не так')
+                    }
+                }catch(err){
+                    console.log(err)
+                }
+            }else{
+                setErrorMessage(checkPassword(password, password))
+            }
+        }
+    
+    const setnewname = async function(){
 
-    const editname = async function () {
-        const data = {
-            
-        }        
+        if(checkName(newName) === ''){
+            const data_name = {
+                name: newName,
+                email: user.email
+            }
+
+            try{
+                const reqest = await fetch("http://localhost:3000/users/set-new-name",
+                    {
+                        method: "PATCH",
+                        headers: {"Content-Type" : "application/json"},
+                        body: JSON.stringify(data_name)
+                    }
+                )
+                if(reqest.ok){
+                    setPossition('success-name-change')
+                    setErrorMessage('')
+                    SetUser(previousUser => ({ ...previousUser, name: data_name.name }))
+                }
+            }catch(err){
+                console.log(err)
+            }
+        }
     }
 
     const delaccount = async function() {
@@ -100,6 +147,7 @@ const PersonalAccount = function({SetMode,SetUser, user}){
             if(reqest.ok){
                 SetMode('login')
                 SetUser(null)
+                setPassword('')
             }else{
                 setErrorMessage('не верный пароль')
             }
@@ -134,7 +182,7 @@ const PersonalAccount = function({SetMode,SetUser, user}){
             <div className="body-info">
                 <div id="pleace-area">
                     <div className="safaty-info-cntainer"><label className="topic">Дата регистрации</label><label className="info-felds">{new Date(user.regdate).toLocaleDateString('ru-RU')}</label></div>
-                    <div className="safaty-info-cntainer"><label className="topic">Редактировать имя</label><label className="info-felds"></label></div>
+                    <div className="safaty-info-cntainer"><label onClick={()=>{setPossition('edite-password-1')}} className="topic">Редактировать имя</label><label className="info-felds"></label></div>
                     <div className="safaty-info-cntainer"><label className="topic">Редактировать email</label><label className="info-felds"></label></div>
                     <div className="safaty-info-cntainer"><label className="topic">Пароль</label><label className="info-felds"></label></div>
                     <div className="safaty-info-cntainer"><label className="topic">Активные сессии</label><label className="info-felds"></label></div>
@@ -152,17 +200,48 @@ const PersonalAccount = function({SetMode,SetUser, user}){
             </div> 
         )
         else if(possition === 'accept-password')return(
+            <div className="body-info">
                 <div id="accept-delete-form">
                     <label>Введите пароль от аккаунта</label>
-                    <div id="password-complex">
-                        <input value={password} onChange={(e)=>{setPassword(e.target.value)}} className="input-area" placeholder="Введите пароль" type={showPassword ? "text" : "password"}></input>
-                        <button id="eye-button" type="button" aria-label="Показать пароль" onClick={()=> setShowPassword(!showPassword)} ><img id="eye" src={showPassword ? openeye : closeeye} alt=""></img></button>
+                    <div className="password-row">
+                        <input value={password} onChange={(e)=>{setPassword(e.target.value)}} className="form-input" placeholder="Введите пароль" type={showPassword ? "text" : "password"}></input>
+                        <button className="password-toggle" type="button" aria-label="Показать пароль" onClick={()=> setShowPassword(!showPassword)} ><img className="password-toggle-icon" src={showPassword ? openeye : closeeye} alt=""></img></button>
                     </div>
-                    <p id="error-mesege">{errorMessage}</p>
-                    <button onClick={()=>{delaccount()}} id="accept-button">Подтвердить</button>
+                    <p className="account-message">{errorMessage}</p>
+                    <button onClick={()=>{delaccount()}} className="account-confirm">Подтвердить</button>
                 </div>
-            )
-        }
+            </div>
+        )
+        else if(possition === 'edite-password-1')return(
+            <div className="body-info">
+                <div id="accept-edite-form">
+                    <label>Введите пароль от аккаунта</label>
+                    <div className="password-row">
+                        <input value={password} onChange={(e)=>{setPassword(e.target.value)}} className="form-input" placeholder="Введите пароль" type={showPassword ? "text" : "password"}></input>
+                        <button className="password-toggle" type="button" aria-label="Показать пароль" onClick={()=> setShowPassword(!showPassword)} ><img className="password-toggle-icon" src={showPassword ? openeye : closeeye} alt=""></img></button>
+                    </div>
+                    <p className="account-message">{errorMessage}</p>
+                    <button onClick={()=>{CheckPasswordForEdite()}} className="account-confirm">Подтвердить</button>
+                </div>
+            </div>
+        )
+        else if(possition === 'edite-password-2')return(
+            <div id="body-edite-password-2">
+                <label id="main-label-edite">Введите новое имя</label>
+                <input value={newName} onChange={(e)=>{setNewName(e.target.value)}} placeholder="Введите новое имя"></input>
+                <label className="account-message">{errorMessage}</label>
+                <button onClick={()=>{setnewname()}}>Продолжить</button>
+            </div>
+        )
+        else if(possition === 'success-name-change')return(
+            <div className="body-info">
+                <div id="name-change-success">
+                    <label className="account-success-title">Вы успешно сменили имя</label>
+                    <button className="account-success-continue" onClick={()=>{setPossition('main')}}>Продолжить</button>
+                </div>
+            </div>
+        )
+    }
     
     return(
         <div id="body">

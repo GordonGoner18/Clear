@@ -169,14 +169,14 @@ const RecoveryPage = function({SetMode}) {
     if(navigatin === 'first-state'){
         return (
             <div id="recovery-email-body">
-                <label id="main-label">Востановление пароля</label>
-                <label id="input-area">Ваш email</label>
-                <input className="input-area" value={email} onChange={(e)=>{setEmail(e.target.value)}}></input>
+                <label className="recovery-title">Востановление пароля</label>
+                <label>Ваш email</label>
+                <input className="form-input" value={email} onChange={(e)=>{setEmail(e.target.value)}}></input>
                 <label className="message">{serverMessage}</label>
                 <label className="message">{errorMessage}</label>
-                <div id="button-complex">
-                    <label onClick={()=>{backlogick()}} id="back">Назад</label>
-                    <button id="submit" onClick={()=>{SendData()}}>Продолжить</button>
+                <div className="recovery-button-complex">
+                    <label onClick={()=>{backlogick()}} className="recovery-back">Назад</label>
+                    <button className="recovery-submit" onClick={()=>{SendData()}}>Продолжить</button>
                 </div>
             </div>
         )
@@ -184,14 +184,14 @@ const RecoveryPage = function({SetMode}) {
     else if(navigatin === 'second-state'){
         return (
             <div id="recovery-code-body">
-                <label id="main-label">Востановление пароля</label>
-                <label id="input-area">Введите код</label>
-                <input className="input-area" value={code} onChange={(e)=>{setCode(e.target.value)}}></input>
+                <label className="recovery-title">Востановление пароля</label>
+                <label>Введите код</label>
+                <input className="form-input" value={code} onChange={(e)=>{setCode(e.target.value)}}></input>
                 <label onClick={()=>{SendData()}} className="message">{serverMessage}</label>
                 <label className="message">{errorMessage}</label>
-                <div id="button-complex">
-                    <label onClick={()=>{backlogick()}} id="back">Назад</label>
-                    <button onClick={()=>{checkcode()}} id="submit">Продолжить</button>
+                <div className="recovery-button-complex">
+                    <label onClick={()=>{backlogick()}} className="recovery-back">Назад</label>
+                    <button onClick={()=>{checkcode()}} className="recovery-submit">Продолжить</button>
                 </div>
              </div>
         )
@@ -199,19 +199,19 @@ const RecoveryPage = function({SetMode}) {
     else if(navigatin === 'third-state'){
         return(
             <div id="New-Password-form">
-                <label id="main-label">Придумайте новый пароль</label>
+                <label className="recovery-title">Придумайте новый пароль</label>
                 <label className="info-labels">Введите новый пароль</label>
-                <div id="password-complex">
-                    <input value={newPassword} onChange={(e)=> {setNewPassword(e.target.value)}} className="input-area" type={showPassword ? "text" : "password"}></input>
-                    <button id="eye-button" type="button" aria-label="Показать пароль" onClick={()=> setShowPassword(!showPassword)} ><img id="eye" src={showPassword ? openeye : closeeye} alt=""></img></button>
+                <div className="password-row">
+                    <input value={newPassword} onChange={(e)=> {setNewPassword(e.target.value)}} className="form-input" type={showPassword ? "text" : "password"}></input>
+                    <button className="password-toggle" type="button" aria-label="Показать пароль" onClick={()=> setShowPassword(!showPassword)} ><img className="password-toggle-icon" src={showPassword ? openeye : closeeye} alt=""></img></button>
                 </div>
                 <label className="info-labels">Повторите пароль</label>
-                <input value={newPasswordReaped} onChange={(e)=> {setNewPasswordReaped(e.target.value)}} className="input-area" type={showPassword ? "text" : "password"}></input>
+                <input value={newPasswordReaped} onChange={(e)=> {setNewPasswordReaped(e.target.value)}} className="form-input" type={showPassword ? "text" : "password"}></input>
                 <label className="message">{serverMessage}</label>
                 <label className="message">{errorMessage}</label>
-                <div id="button-complex">
-                    <label onClick={()=>{backlogick()}} id="back">Назад</label>
-                    <button id="submit" onClick={()=>{SendNewPassword()}}>Продолжить</button>
+                <div className="recovery-button-complex">
+                    <label onClick={()=>{backlogick()}} className="recovery-back">Назад</label>
+                    <button className="recovery-submit" onClick={()=>{SendNewPassword()}}>Продолжить</button>
                 </div>
             </div>
         )
@@ -219,8 +219,8 @@ const RecoveryPage = function({SetMode}) {
     else if(navigatin === 'foth'){
         return(
             <div id="success-body">
-                <label id="main-label">Успешная смена пароля</label>
-                <button id="next" onClick={()=>{SetMode('login')}}>Войти</button>
+                <label className="recovery-title">Успешная смена пароля</label>
+                <button className="success-continue" onClick={()=>{SetMode('login')}}>Войти</button>
             </div>
         )
     }

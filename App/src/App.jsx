@@ -1,4 +1,5 @@
 import './App.css'
+import './form-controls.css'
 import Header from'./Components/Header/header.jsx'
 import Home from './Components/home-page/home-page.jsx'
 import Reg from './Components/loginform-regform-page/reg.jsx'
@@ -7,6 +8,8 @@ import RecoveryPage from './Components/recovery-page/recovery-page.jsx'
 import { useEffect, useState } from 'react'
 import Loginform from './Components/loginform-regform-page/loginform-page.jsx'
 import PersonalAccount from './Components/personal-account/personal-account.jsx'
+import About from './Components/about-page/about-page.jsx'
+import Popular from './Components/popular-question-page/popular-question.jsx'
 
 
 function App() {
@@ -48,39 +51,41 @@ function App() {
         <div className='conteiner'>
           <Header SetMode={SetMode}/>
           <Home/>
+          <About/>
+          <Popular/>
         </div>
       )
     case 'login':
         return(
-          <div className='conteiner'>
+          <div className='conteiner-personal'>
           <Header SetMode={SetMode}/>
           <Loginform SetMode={SetMode} SetUser={SetUser} auntification={auntification}/>  
         </div>
       )
       case 'succes-reg-message': 
       return(
-        <div className='conteiner'>
+        <div className='conteiner-personal'>
           <Header SetMode={SetMode}/>
           <SuccessRegmessage SetMode={SetMode}/>
         </div>
       )
       case 'reg':
         return(
-          <div className='conteiner'>
+          <div className='conteiner-personal'>
               <Header SetMode={SetMode}/>
               <Reg SetMode={SetMode}/>
             </div>
           )
       case 'recovery-password':
         return(
-          <div className='conteiner'>
+          <div className='conteiner-personal'>
             <Header SetMode={SetMode}/>
             <RecoveryPage SetMode={SetMode}/>
           </div>
         )
       case 'prsonal-account':
         return(
-          <div className='conteiner'>
+          <div className='conteiner-personal'>
             <Header SetMode={SetMode}/>
             {user? <PersonalAccount SetMode={SetMode} SetUser={SetUser} user={user}/>: <Loginform SetMode={SetMode} SetUser={SetUser}/>}
           </div>

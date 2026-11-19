@@ -4,8 +4,8 @@ const SuccessRegmessage = function({SetMode}) {
     
     return(
         <div id="body-form">
-            <label id="main-label">Вы успешно зарегистрировались</label>
-            <button id="next" onClick={()=>{SetMode('login')}}>Войти</button>
+            <label className="registration-success-title">Вы успешно зарегистрировались</label>
+            <button className="success-continue" onClick={()=>{SetMode('login')}}>Войти</button>
         </div>
     )
 }

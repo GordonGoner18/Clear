@@ -1,0 +1,45 @@
+:where(#about-body) > p{
+    color: white;
+    font-size: 1.5rem;
+}
+
+#email-complex label{
+    color: rgb(254, 254, 254);
+    font-size: 1.5rem;
+}
+
+#about-body{
+    display: flex;
+    width: 80%;
+    height: 50%;
+    flex-direction: column;
+    margin: 0 auto;
+    margin-bottom: 15%;
+}
+
+#about-body a{
+    text-decoration: none;
+    color: blue;
+    font-size: 1.5rem;
+}
+
+.main-active{
+    opacity: 0;
+    animation: fadeIn 1s ease-in forwards;
+    font-weight: bold;
+    color: rgb(197, 242, 255);
+    font-size: 70px;
+    font-family: 'Oswald', sans-serif;
+}
+
+.main-passive{
+    font-weight: bold;
+    color: rgb(197, 242, 255);
+    font-size: 70px;
+    font-family: 'Oswald', sans-serif;
+}
+
+#email-complex{
+    display: flex;
+    gap: 1%;
+}

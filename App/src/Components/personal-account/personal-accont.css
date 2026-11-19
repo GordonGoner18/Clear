@@ -110,7 +110,7 @@
     border-color: white;
 }
 
-.personal-info-felds p{
+p.personal-info-felds{
     background-color: rgb(172, 172, 172);
     
 }
@@ -178,6 +178,22 @@
     gap: 15%;
 }
 
+#accept-edite-form{
+    margin: auto;
+    width: 30%;
+    height: 50%;
+    background-color: rgb(111, 111, 111);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    border-style: solid;
+    border-width: 3px;
+    border-color: black;
+    gap: 15%;
+}
+
 #accept-delete-form label{
     color: white;
     font-family: 'Oswald', sans-serif;
@@ -188,7 +204,7 @@
     border-radius: 5px;
 }
 
-#accept-button{
+.account-confirm{
     width: 60%;
     height: 10%;
     background-color: rgb(210, 240, 244);
@@ -208,4 +224,77 @@
 
 #open-search-container label{
     margin: auto;
+}
+
+#body-edite-password-2 {
+    box-sizing: border-box;
+    width: min(90%, 440px);
+    margin: auto;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    background: #303030;
+    border: 2px solid #707070;
+    border-radius: 16px;
+    color: white;
+}
+
+#body-edite-password-2 input {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 52px;
+    padding: 12px;
+    font: inherit;
+    border: 2px solid #888;
+    border-radius: 8px;
+}
+
+#body-edite-password-2 input:focus-visible {
+    outline: 3px solid #8cf5ff;
+    outline-offset: 3px;
+}
+
+#body-edite-password-2 button{
+    background-color: rgb(140, 245, 255);
+    height: 50px;
+}
+
+#main-label-edite{
+    font-size: 2rem;
+    font-family: 'Oswald', sans-serif;
+}
+
+#name-change-success {
+    width: min(90%, 440px);
+    margin: auto;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    text-align: center;
+    background: #24382e;
+    border: 2px solid #7ee2a8;
+    border-radius: 16px;
+}
+
+#name-change-success .account-success-continue {
+    background-color: #8cf5ff;
+    font: inherit;
+    cursor: pointer;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    min-height: 52px;
+    height: auto;
+    padding: 12px;
+    border-radius: 8px;
+}
+
+#name-change-success .account-success-title {
+    margin: 0;
+    color: #c2f5d5;
+    font-family: 'Oswald', sans-serif;
+    font-size: 28px;
+    line-height: 1.4;
 }

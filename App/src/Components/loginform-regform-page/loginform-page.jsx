@@ -15,7 +15,6 @@ const Loginform = function({SetMode, SetUser}){
     const [email, setEmail] = useState("")
     const [checkbox, setCheckBox] = useState(false)
     
-    // при входе правила пароля не проверяем: подсказка о правилах помогла бы подбору чужого пароля
     const firstError = function(){
         if(password === "") return checkEmail(email) || "Введите пароль"
         return checkEmail(email) || checkCheckBox(checkbox)
@@ -76,18 +75,18 @@ const Loginform = function({SetMode, SetUser}){
     }
     
     return(
-        <div id="login-body">
-            <label id="main-label">Войдите в свой профиль</label>
-            <div id="switchmode"><button className="active" onClick={()=>SetMode('login')}>Вход</button><button onClick={()=>SetMode('reg')}>Регистрация</button></div>
-            <input value={email} onChange={(e)=>{setEmail(e.target.value)}} className="input-area" placeholder="Введите email"></input>
-            <div id="password-complex">
-                <input value={password} onChange={(e)=>{setPassword(e.target.value)}} className="input-area" placeholder="Введите пароль" type={showPassword ? "text" : "password"}></input>
-                <button id="eye-button" type="button" aria-label="Показать пароль" onClick={()=> setShowPassword(!showPassword)} ><img id="eye" src={showPassword ? openeye : closeeye} alt=""></img></button>
+        <div className="auth-login-body">
+            <label className="auth-title">Войдите в свой профиль</label>
+            <div className="auth-switchmode"><button className="active" onClick={()=>SetMode('login')}>Вход</button><button onClick={()=>SetMode('reg')}>Регистрация</button></div>
+            <input value={email} onChange={(e)=>{setEmail(e.target.value)}} className="form-input" placeholder="Введите email"></input>
+            <div className="password-row">
+                <input value={password} onChange={(e)=>{setPassword(e.target.value)}} className="form-input" placeholder="Введите пароль" type={showPassword ? "text" : "password"}></input>
+                <button className="password-toggle" type="button" aria-label="Показать пароль" onClick={()=> setShowPassword(!showPassword)} ><img className="password-toggle-icon" src={showPassword ? openeye : closeeye} alt=""></img></button>
             </div>
             {ErrorMessage()}
-            <label onChange={(e)=>{setCheckBox(e.target.checked)}} id="accept-politic"><input id="accept" type="checkbox"></input>Я принимаю политику пользования</label>
-            <button onClick={()=>{loginreqest()}} id="continue">Продолжить</button>
-            <label onClick={()=>{SetMode("recovery-password")}} id="forget-password">Забыли пароль?</label>
+            <label onChange={(e)=>{setCheckBox(e.target.checked)}} className="auth-accept-politic"><input className="auth-accept" type="checkbox"></input>Я принимаю политику пользования</label>
+            <button onClick={()=>{loginreqest()}} className="auth-continue">Продолжить</button>
+            <label onClick={()=>{SetMode("recovery-password")}} className="auth-forget-password">Забыли пароль?</label>
         </div> 
     )
 }
