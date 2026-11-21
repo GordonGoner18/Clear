@@ -1,0 +1,134 @@
+#fast-check-main-body{
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    height: 70vh;
+    color: white;  
+    margin: 0 auto;
+    margin-top: 15vh;
+    margin-bottom: 15vh;
+    gap: 10%;
+}
+
+.acive-label-check{
+    opacity: 0;
+    animation: fadeIn 1s ease-in forwards;
+    font-weight: bold;
+    color: rgb(197, 242, 255);
+    font-size: 70px;
+    font-family: 'Oswald', sans-serif;
+}
+
+.pasive-label-check{
+    font-weight: bold;
+    color: rgb(197, 242, 255);
+    font-size: 70px;
+    font-family: 'Oswald', sans-serif;
+}
+
+#fast-check-body{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    background-color: rgb(20, 14, 134);
+    border-style: solid;
+    border-radius: 10px;
+    border-width: 5px;
+}
+
+#input-check-complex{
+    margin-top: 5%;
+    display: flex;
+    gap: 10%;
+    width: 50%;
+    height: 100%;
+    flex-direction: column;
+}
+
+#input-check-complex input{
+    width: 80%;
+    height: 10%;
+    margin: 0 auto;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+#input-check-complex button{
+    width: 60%;
+    height: 10%;
+    margin: 0 auto;
+    cursor: pointer;
+    border-radius: 10px;
+    background-color: rgb(0, 153, 255);
+    font-size: large;
+    color: #fbfbfb;
+}
+
+#input-check-complex label{
+    font-size: 2rem;
+    font-family: 'Oswald', sans-serif;
+    margin: 0 auto;
+}
+
+#answer-body{
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#aianswer{
+    width: 80%;
+    height: 60%;
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(255, 255, 255);
+    border-radius: 10px;
+    border-style: solid;
+    border-width: 3px;
+    border-color: black;
+}
+
+#loading-complex{
+    display: flex;
+    gap: 5px;
+    width: 100%;
+    height: 10%;
+    margin-top: 12%;
+}
+
+#AiIocn{
+    width: 40px;
+    height: 40px;
+    right: 10px;
+}
+
+#dots1{
+    animation: rise-down 1s linear infinite;
+    position: relative;
+}
+
+#dots2{
+    animation: rise-down 1s 0.2s linear infinite;
+    position: relative;
+}
+
+#dots3{
+    animation: rise-down 1s 0.4s linear infinite;
+    position: relative;
+}
+
+
+
+@keyframes rise-down{
+    0%{
+        bottom: 0px;
+    }
+    50%{
+        bottom: 5px;
+    }
+    100%{
+        bottom: 0px;
+    }
+}

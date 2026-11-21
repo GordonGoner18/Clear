@@ -6,7 +6,16 @@ const Header = function({SetMode}){
         <div id="Header-body">
             <nav id="header-nav">
                 <a onClick={()=>{SetMode('home')}} id="prozrachno-label">Прозрачно</a>
-                <a onClick={()=>{SetMode('fast-check')}} id="fast-start">Быстрая проверка</a>
+                <a onClick={()=>{
+                    const fastcheck = document.getElementById('fast-check-main-body')
+                    if(fastcheck){
+                        fastcheck.scrollIntoView({
+                            behavior: "smooth",
+                            block: 'start'
+                        })
+                    }
+                    
+                }} id="fast-start">Быстрая проверка</a>
                 <a onClick={()=>{
                     const about = document.getElementById('about-body')
                     if(about){

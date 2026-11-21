@@ -6,7 +6,6 @@ import { SessionCookie, User } from "./users.entity.js";
 import { Repository } from "typeorm";
 import crypto from 'node:crypto'
 import  { SESSION_LIMIT_MS } from './constants/users.const.js'
-import { setnewpasswordto } from "./dto/users.setnewpasswordto.js";
 @Injectable()
 export class SessionServce{
     constructor(@InjectRepository(SessionCookie) private SessionRepository: Repository<SessionCookie>){}

@@ -10,6 +10,7 @@ import Loginform from './Components/loginform-regform-page/loginform-page.jsx'
 import PersonalAccount from './Components/personal-account/personal-account.jsx'
 import About from './Components/about-page/about-page.jsx'
 import Popular from './Components/popular-question-page/popular-question.jsx'
+import FastCheck from './Components/fast-check/fast-check.jsx'
 
 
 function App() {
@@ -51,6 +52,7 @@ function App() {
         <div className='conteiner'>
           <Header SetMode={SetMode}/>
           <Home/>
+          <FastCheck/>
           <About/>
           <Popular/>
         </div>

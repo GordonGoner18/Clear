@@ -9,5 +9,4 @@ const Home = function({SetMode}){
         </div>
     )
 }
-
 export default Home
